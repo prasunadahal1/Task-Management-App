@@ -18,6 +18,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed:(){}, icon: Icon(Icons.arrow_back_ios),color:Colors.white),
         centerTitle: true,
         backgroundColor:Color(0xFF84C5A5),
         title: Text('Create New Task',style: TextStyle(color: Colors.white),),
@@ -25,8 +26,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
           Icon(Icons.task,color: Colors.white),SizedBox(width:80),
         ],
       ),
-    
-      backgroundColor: primaryMint,
+      backgroundColor: Color(0xFF84C5A5),
       body: _body2(context),
     );
   }
@@ -175,204 +175,163 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
     );
   }
 
-  Widget _body2(context){
-    return Consumer<TaskProvider>(
-      builder: (context, p, _) {
-        return SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 0,horizontal: 16),
-                decoration: BoxDecoration(
-                  color:Color(0xFF84C5A5),
-                  borderRadius: BorderRadius.only(),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      textAlignVertical: TextAlignVertical(y: 0.5),
-                      controller: p.controller,
-                      decoration: InputDecoration(
-                        hintText: 'Title',
-                        hintStyle: TextStyle(color: Colors.white),
-                        border: InputBorder.none,
-                      ),
+   Widget _body2(context){
+     return Consumer<TaskProvider>(
+       builder: (context, p, _) {
+         return SingleChildScrollView(
+           child: Column(
+             mainAxisAlignment: MainAxisAlignment.start,
+             children: [
+               Container(
+                 padding: EdgeInsets.symmetric(vertical: 0,horizontal: 16),
+                 decoration: BoxDecoration(
+                   color: Color(0xFF84C5A5),
+                   borderRadius: BorderRadius.only(),
+                 ),
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     TextFormField(
+                       textAlignVertical: TextAlignVertical(y: 0.5),
+                       controller: p.controller,
+                       decoration: InputDecoration(
+                         hintText: 'Title',
+                         hintStyle: TextStyle(color: Colors.white),
+                         border: InputBorder.none,
+                       ),
+                     ),
+                     Divider(color: Colors.white54),
+                     TextFormField(
+                       controller: p.descriptioncontroller,
+                       decoration: InputDecoration(
+                         hintText: 'Description',
+                         hintStyle: TextStyle(color: Colors.white),
+                         border: InputBorder.none,
+                       ),
+                     ),
+                     Divider(color: Colors.white54),
+                     TextFormField(
+                       controller: p.datecontroller,
+                       decoration: InputDecoration(
+                         labelText: 'Select Date',
+                         labelStyle: TextStyle(color: Colors.white),
+                         border: InputBorder.none,
+                         suffixIcon: Icon(Icons.calendar_today_rounded, color: Colors.white),
+                       ),
+                       onTap: () async {
+                         p.pickDate(context);
+                       },
+                     ),
+                     Divider(color: Colors.white54),
+                   ],
+                 ),
+               ),
+               SizedBox(height: 30),
+               Container(
+                 width: MediaQuery.of(context).size.width * 1,
+                 height: MediaQuery.of(context).size.height * 0.7,
+                 decoration: BoxDecoration(
+                   color: Colors.white,
+                   borderRadius: BorderRadius.only(
+                     topLeft: Radius.circular(40),
+                     topRight: Radius.circular(40),
+                   ),
+                 ),
+                 child: Padding(
+                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                   child: Column(
+                     children: [
+                       Row(
+                         children: [
+                           Expanded(
+                             child: GestureDetector(
+                               onTap: () {
+                                 p.pickStartTime(context);
+                               },
+                               child: _timeField(
+                                 'Start Time',
+                                 p.startTime == null
+                                     ? "7:00AM"
+                                     : p.startTime!.format(context),
+                               ),
+                             ),
+                           ),
+                           SizedBox(width: 20),
+                           Expanded(
+                             child: GestureDetector(
+                               onTap: () {
+                                 p.pickEndTime(context);
+                               },
+                               child: _timeField(
+                                 'End Time',
+                                 p.endTime == null
+                                     ? "7:00 PM"
+                                     : p.endTime!.format(context),
+                               ),
+                             ),
+                           ),
+                         ],
+                       ),
+                       SizedBox(height: 30),
+                       Align(
+                         alignment: Alignment.centerLeft,
+                         child: Text(
+                           "Category",
+                           style: TextStyle(
+                             fontWeight: FontWeight.bold,
+                             fontSize: 18,
+                           ),
+                         ),
+                       ),
+                       SizedBox(height: 20),
+                       Wrap(
+                         spacing: 10,
+                         runSpacing: 10,
+                         children: [
+                           _categoryChip("Work", false),
+                           _categoryChip("Meeting", true),
+                           _categoryChip("Study", false),
+                           _categoryChip("Personal", false),
+                           _categoryChip("Personal", false),
+                           _categoryChip("Personal", false),
+                           _categoryChip("Personal", false),
+                           _categoryChip("Personal", false),
+                         ],
+                       ),
+                       SizedBox(height: 80),
+                       CustomElevatedButton(
+                         backgroundColor:Color(0xFF84C5A5),
+                         width: 30,
+                         height: 50,
+                         borderRadius: 15,
+                         onPressed: () async {
+                           if (p.controller.text.trim().isNotEmpty) {
+                             context.read<TaskProvider>().addTask(
+                               p.controller.text.trim(),
+                               p.descriptioncontroller.text.trim(),
+                               p.datecontroller.text.trim(),
+                               p.startTimeController.text.trim(),
+                               p.endTimeController.text.trim(),
+                               p.categorycontroller.text.trim(),
+                             );
+                           }
+                           Navigator.pop(context);
+                         },
+                         widget: Text('Create Task'),
+                       ),
+                     ],
+                   ),
+                 ),
+               ),
+               SizedBox(height:20),
+             ],
+           ),
+         );
+       },
+     );
+   }
 
-                      Divider(color: Colors.white,indent:25,endIndent:25,thickness:1,),
-                      TextFormField(controller: p.descriptioncontroller,
-                        decoration: InputDecoration(
-                          hintText:'Description',
-                          hintStyle: TextStyle(color: Colors.white),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                      Divider(color: Colors.white,indent:25,endIndent:25,thickness:1,),
-                      TextFormField(controller: p.datecontroller,
-                        decoration:InputDecoration(
-                          labelText: 'Select Date',
-                          labelStyle: TextStyle(color: Colors.white),
-                          border: InputBorder.none,
-                          suffixIcon: Icon(Icons.calendar_today_rounded,color: Colors.white,),
-                        ),
-                        onTap: () async {
-                          p.pickDate(context);
-                        },
-                      ),
-                      Divider(color: Colors.white,indent:25,endIndent:25,thickness:1,),
-                    ],
-                  ),
 
-                    ),
-                    Divider(color: Colors.white54),
-                    TextFormField(
-                      controller: p.descriptioncontroller,
-                      decoration: InputDecoration(
-                        hintText: 'Description',
-                        hintStyle: TextStyle(color: Colors.white),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                    Divider(color: Colors.white54),
-                    TextFormField(
-                      controller: p.datecontroller,
-                      decoration: InputDecoration(
-                        labelText: 'Select Date',
-                        labelStyle: TextStyle(color: Colors.white),
-                        border: InputBorder.none,
-                        suffixIcon: Icon(Icons.calendar_today_rounded, color: Colors.white),
-                      ),
-                      onTap: () async {
-                        p.pickDate(context);
-                      },
-                    ),
-                    Divider(color: Colors.white54),
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
-              Container(
-                width: MediaQuery.of(context).size.width * 1,
-                height: MediaQuery.of(context).size.height * 0.6,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              p.pickStartTime(context);
-                            },
-                            child: Expanded(
-                              child: _timeField(
-                                'Start Time',
-                                p.startTime == null
-                                    ? "7:00AM"
-                                    : p.startTime!.format(context),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () {
-                              p.pickEndTime(context);
-                            },
-                            child: Expanded(
-                              child: _timeField(
-                                'End Time',
-                                p.endTime == null
-                                    ? "7:00 PM"
-                                    : p.endTime!.format(context),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 30),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Category",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        Spacer(),
-                        // SizedBox(height:70),
-                        CustomElevatedButton(backgroundColor:Color(0xFF84C5A5),width:30,height:50,borderRadius: 15,
-                          onPressed:()async{
-                            if (p.controller.text.trim().isNotEmpty) {
-                              context.read<TaskProvider>().addTask(
-                                p.controller.text.trim(),
-                                p.descriptioncontroller.text.trim(),
-                                p.datecontroller.text.trim(),
-                                p.startTimeController.text.trim(),
-                                p.endTimeController.text.trim(),
-                                p.categorycontroller.text.trim(),
-                              );
-                            }
-                            Navigator.pop(context);
-                          }, widget:Text('Create Task'),)
-                      ],
-                    ),
-                      ),
-                      SizedBox(height: 20),
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: [
-                          _categoryChip("Work", false),
-                          _categoryChip("Meeting", true),
-                          _categoryChip("Study", false),
-                          _categoryChip("Personal", false),
-                          _categoryChip("Personal", false),
-                          _categoryChip("Personal", false),
-                          _categoryChip("Personal", false),
-                          _categoryChip("Personal", false),
-                        ],
-                      ),
-                      SizedBox(height: 80),
-                      CustomElevatedButton(
-                        backgroundColor: primaryMint,
-                        width: 30,
-                        height: 50,
-                        borderRadius: 15,
-                        onPressed: () async {
-                          if (p.controller.text.trim().isNotEmpty) {
-                            context.read<TaskProvider>().addTask(
-                              p.controller.text.trim(),
-                              p.descriptioncontroller.text.trim(),
-                              p.datecontroller.text.trim(),
-                              p.startTimeController.text.trim(),
-                              p.endTimeController.text.trim(),
-                              p.categorycontroller.text.trim(),
-                            );
-                          }
-                          Navigator.pop(context);
-                        },
-                        widget: Text('Create Task'),
-                      ),
-                    ],n
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-            ],
-          ),
-        );
-      },
-    );
-  }
    Widget _categoryChip(String text, bool selected) {
      return Chip(
        shape: RoundedSuperellipseBorder(borderRadius: BorderRadius.circular(20)),
