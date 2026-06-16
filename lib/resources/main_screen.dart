@@ -29,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
           height: 63,
           shape:CircularNotchedRectangle(),
           notchMargin:5,
-          color: Color(0xFFA8E6C1),
+          color: Color(0xFF84C5A5),
           child: SizedBox(height: 50,
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children:[
@@ -55,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color:Color(0xFF4CAF50).withOpacity(0.4),
+              color:Color(0xFF84C5A5).withOpacity(0.4),
               blurRadius:12,
               offset: Offset(0, 6),
             ),
