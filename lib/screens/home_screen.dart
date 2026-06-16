@@ -19,10 +19,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:Color(0xFFECFCF3),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('Hi,User!\nTodays task list'),
+        backgroundColor:Color(0xFFECFCF3),
+        title: Column(
+          children: [
+            SizedBox(height:5),
+            Text('Hi,User!',style: TextStyle(fontWeight: FontWeight.w500),),
+            Text('Todays task list',style: TextStyle(fontWeight: FontWeight.w400,color: Colors.grey.shade700,fontSize:18)),
+          ],
+        ),
       ),
       drawer: Drawer(
         child: ListView(

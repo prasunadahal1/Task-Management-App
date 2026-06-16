@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:task_app/providers/task_providers.dart';
 import 'package:provider/provider.dart';
@@ -19,16 +18,16 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryMint,
-        title: Text('Create New Task'),
+        centerTitle: true,
+        backgroundColor:Color(0xFF84C5A5),
+        title: Text('Create New Task',style: TextStyle(color: Colors.white),),
         actions: [
-          Icon(Icons.task,color: Colors.black),
-          SizedBox(width: 16,)
+          Icon(Icons.task,color: Colors.white),SizedBox(width:80),
         ],
       ),
+    
       backgroundColor: primaryMint,
       body: _body2(context),
-
     );
   }
 
@@ -186,7 +185,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
               Container(
                 padding: EdgeInsets.symmetric(vertical: 0,horizontal: 16),
                 decoration: BoxDecoration(
-                  color: primaryMint,
+                  color:Color(0xFF84C5A5),
                   borderRadius: BorderRadius.only(),
                 ),
                 child: Column(
@@ -200,6 +199,31 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                         hintStyle: TextStyle(color: Colors.white),
                         border: InputBorder.none,
                       ),
+
+                      Divider(color: Colors.white,indent:25,endIndent:25,thickness:1,),
+                      TextFormField(controller: p.descriptioncontroller,
+                        decoration: InputDecoration(
+                          hintText:'Description',
+                          hintStyle: TextStyle(color: Colors.white),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                      Divider(color: Colors.white,indent:25,endIndent:25,thickness:1,),
+                      TextFormField(controller: p.datecontroller,
+                        decoration:InputDecoration(
+                          labelText: 'Select Date',
+                          labelStyle: TextStyle(color: Colors.white),
+                          border: InputBorder.none,
+                          suffixIcon: Icon(Icons.calendar_today_rounded,color: Colors.white,),
+                        ),
+                        onTap: () async {
+                          p.pickDate(context);
+                        },
+                      ),
+                      Divider(color: Colors.white,indent:25,endIndent:25,thickness:1,),
+                    ],
+                  ),
+
                     ),
                     Divider(color: Colors.white54),
                     TextFormField(
@@ -283,6 +307,24 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                             fontSize: 18,
                           ),
                         ),
+                        Spacer(),
+                        // SizedBox(height:70),
+                        CustomElevatedButton(backgroundColor:Color(0xFF84C5A5),width:30,height:50,borderRadius: 15,
+                          onPressed:()async{
+                            if (p.controller.text.trim().isNotEmpty) {
+                              context.read<TaskProvider>().addTask(
+                                p.controller.text.trim(),
+                                p.descriptioncontroller.text.trim(),
+                                p.datecontroller.text.trim(),
+                                p.startTimeController.text.trim(),
+                                p.endTimeController.text.trim(),
+                                p.categorycontroller.text.trim(),
+                              );
+                            }
+                            Navigator.pop(context);
+                          }, widget:Text('Create Task'),)
+                      ],
+                    ),
                       ),
                       SizedBox(height: 20),
                       Wrap(
@@ -320,7 +362,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                         },
                         widget: Text('Create Task'),
                       ),
-                    ],
+                    ],n
                   ),
                 ),
               ),
@@ -335,7 +377,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
      return Chip(
        shape: RoundedSuperellipseBorder(borderRadius: BorderRadius.circular(20)),
        backgroundColor:
-       selected ? Color(0xFFA8E6C1) : Color(0xFFEAFBF0),
+       selected ? Color(0xFF84C5A5) : Color(0xFFEAFBF0),
        label: Text(
          text,
          style: TextStyle(
