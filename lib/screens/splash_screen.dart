@@ -15,19 +15,22 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Color(0xFFECFCF3),
+      backgroundColor: Color(0xFFECFCF3),
       body: Container(
         child: Column(
           // mainAxisAlignment:.center,
           // crossAxisAlignment: .center,
-          spacing:5,
+          spacing: 5,
           children: [
             Container(
-                height: MediaQuery.of(context).size.height * 0.35,width: MediaQuery.of(context).size.width * 0.75,
-                margin: EdgeInsets.only(left:75,top: 140),
-                child: Image.asset("assets/home2.png",fit: BoxFit.cover,)
+              height: MediaQuery.of(context).size.height * 0.35,
+              width: MediaQuery.of(context).size.width * 0.75,
+              margin: EdgeInsets.only(left: 75, top: 140),
+              child: Image.asset("assets/home2.png", fit: BoxFit.cover),
             ),
-            Text("Keep It All In\nOne Place", textAlign: TextAlign.center,
+            Text(
+              "Keep It All In\nOne Place",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
@@ -38,23 +41,23 @@ class _SplashScreenState extends State<SplashScreen> {
             Expanded(
               child: PageView(
                 controller: _controller,
-               onPageChanged: (index){
+                onPageChanged: (index) {
                   setState(() {
-                    currentPage=index;
+                    currentPage = index;
                   });
-               },
-               children: [
-                Center(child:_page1(context)) ,
-                 Center(child:_page2(context)),
-                 Center(child:_page3(context)),
-               ],
+                },
+                children: [
+                  Center(child: _page1(context)),
+                  Center(child: _page2(context)),
+                  Center(child: _page3(context)),
+                ],
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width:currentPage==0?25:8,
+                  width: currentPage == 0 ? 25 : 8,
                   height: 8,
                   decoration: BoxDecoration(
                     color: Color(0xFF84C5A5),
@@ -63,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 SizedBox(width: 6),
                 Container(
-                  width:currentPage==1?25:8,
+                  width: currentPage == 1 ? 25 : 8,
                   height: 8,
                   decoration: BoxDecoration(
                     color: Color(0xFF84C5A5),
@@ -77,43 +80,55 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 SizedBox(width: 6),
                 Container(
-                  width:currentPage==2?25:8,
+                  width: currentPage == 2 ? 25 : 8,
                   height: 8,
                   decoration: BoxDecoration(
                     color: Color(0xFF84C5A5),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
               ],
             ),
-             SizedBox(height: 90),
+            SizedBox(height: 90),
             Row(
-              mainAxisAlignment:.center,
+              mainAxisAlignment: .center,
               children: [
-                ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF84C5A5),
-                    elevation:2,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                    onPressed:()async{
+                InkWell(
+                  onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_){
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) {
                           return MainScreen();
                         },
-                        ));
-                },
-                  child: Row(
-                    mainAxisAlignment: .center,
-                    children: [
-                      Text('Get Start',style: TextStyle(fontSize: 18, color: Colors.white,),),
-                      SizedBox(width: 8),
-                      Icon(
-                        Icons.arrow_forward,size:30,
-                        color: Colors.white,
                       ),
-                    ],
+                    );
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF84C5A5),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: .center,
+                      children: [
+                        Text(
+                          'Get Start',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                        SizedBox(width: 8),
+                        Icon(
+                          Icons.arrow_forward,
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(height:100),
+                SizedBox(height: 100),
               ],
             ),
           ],
@@ -121,10 +136,13 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-  Widget _page1(BuildContext context){
+
+  Widget _page1(BuildContext context) {
     return Column(
       children: [
-        Text("Organize your tasks and boost \n your productivity every day.", textAlign: TextAlign.center,
+        Text(
+          "Organize your tasks and boost \n your productivity every day.",
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
             color: Colors.grey.shade700,
@@ -134,57 +152,74 @@ class _SplashScreenState extends State<SplashScreen> {
       ],
     );
   }
-  Widget _page2(BuildContext context){
-    return  Center(
+
+  Widget _page2(BuildContext context) {
+    return Center(
       child: Container(
-        margin:  EdgeInsets.symmetric(horizontal:20),
-        padding:  EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          color: Color(0xFFECFCF3),
-        ),
-        child:  Row(
+        margin: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.all(2),
+        decoration: BoxDecoration(color: Color(0xFFECFCF3)),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Column(
               children: [
-                Text("50+", style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade700,
-                  height: 1.6,
-                ),),
-                Text("Tasks", style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade700,
-                  height: 1.6,
-                ),),
+                Text(
+                  "50+",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade700,
+                    height: 1.6,
+                  ),
+                ),
+                Text(
+                  "Tasks",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade700,
+                    height: 1.6,
+                  ),
+                ),
               ],
             ),
             Column(
               children: [
-                Text("24/7",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade700,
-                  height: 1.6,
-                ),),
-                Text("Access",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade700,
-                  height: 1.6,
-                ),),
+                Text(
+                  "24/7",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade700,
+                    height: 1.6,
+                  ),
+                ),
+                Text(
+                  "Access",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade700,
+                    height: 1.6,
+                  ),
+                ),
               ],
             ),
             Column(
               children: [
-                Text("100%",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade700,
-                  height:1.6,
-                ),),
-                Text("Free",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade700,
-                  height: 1.6,
-                ),),
+                Text(
+                  "100%",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade700,
+                    height: 1.6,
+                  ),
+                ),
+                Text(
+                  "Free",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade700,
+                    height: 1.6,
+                  ),
+                ),
               ],
             ),
           ],
@@ -193,31 +228,25 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-Widget _page3(BuildContext context){
+  Widget _page3(BuildContext context) {
     return Container(
-      margin:  EdgeInsets.symmetric(horizontal:40),
-      padding:  EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: Color(0xFFECFCF3),
-      ),
+      margin: EdgeInsets.symmetric(horizontal: 40),
+      padding: EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(color: Color(0xFFECFCF3)),
       child: Column(
         children: [
-           Icon(
-            Icons.trending_up_rounded,
-            size:35,
-            color: Color(0xFF84C5A5),
-          ),
-          SizedBox(height:3),
+          Icon(Icons.trending_up_rounded, size: 35, color: Color(0xFF84C5A5)),
+          SizedBox(height: 3),
           Text(
             "Boost Productivity",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize:16,
+              fontSize: 16,
               color: Colors.grey.shade700,
               fontWeight: FontWeight.w800,
             ),
           ),
-          SizedBox(height:3),
+          SizedBox(height: 3),
           // Container(
           //   // padding: EdgeInsets.symmetric(
           //   //   horizontal:5,
@@ -247,6 +276,5 @@ Widget _page3(BuildContext context){
         ],
       ),
     );
-
-}
+  }
 }
