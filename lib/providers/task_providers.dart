@@ -13,27 +13,27 @@ class TaskProvider extends ChangeNotifier {
   List<Map<String, dynamic>> tasks = [
     {
       'title': 'Learn Flutter',
-      'description': 'add details',
+      'description': 'Add Details',
       'date': '2083-02-30',
       'startTime': '7:00am',
       'endTime': '5:00pm',
-      'category': 'work',
+      'category': 'Work',
     },
     {
       'title': 'Make Weather App',
-      'description': 'add details',
+      'description': 'Add Details',
       'date': '2083-02-30',
       'startTime': '7:00am',
       'endTime': '5:00pm',
-      'category': 'work',
+      'category': 'Work',
     },
     {
       'title': 'Make Todo app',
-      'description': 'add details',
+      'description': 'Add Details',
       'date': '2083-02-30',
       'startTime': '7:00am',
       'endTime': '5:00pm',
-      'category': 'work',
+      'category': 'Work',
     },
   ];
   String? _startTime;
