@@ -98,13 +98,13 @@ class ProfileScreen extends StatelessWidget {
 
             SizedBox(height: 30),
 
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon:  Icon(Icons.logout),
-              label:  Text("Logout"),
-            ),
+            // ElevatedButton.icon(
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            //   icon:  Icon(Icons.logout),
+            //   label:  Text("Logout"),
+            // ),
           ],
         ),
       ),
