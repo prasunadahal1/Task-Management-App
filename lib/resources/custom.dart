@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/colors/colors.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
@@ -26,7 +27,7 @@ class CustomElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor ?? Colors.transparent,
+        backgroundColor:CustomColors.primarygreen(context) ?? Colors.transparent,
         foregroundColor: Colors.white,
         elevation: 0.0,
         minimumSize: Size(MediaQuery.of(context).size.width * width, height,),

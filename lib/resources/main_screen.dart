@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../colors/colors.dart';
 import '../screens/addtask_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/taskupdate_screen.dart';
@@ -29,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
           height: 63,
           shape:CircularNotchedRectangle(),
           notchMargin:5,
-          color: Color(0xFF84C5A5),
+          color: CustomColors.navigation(context),
           child: SizedBox(height: 50,
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children:[
@@ -49,7 +50,6 @@ class _MainScreenState extends State<MainScreen> {
         ),
         ),
       ),
-
       floatingActionButton: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -61,8 +61,8 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
-        child: FloatingActionButton(backgroundColor: Colors.white,elevation: 0,shape:CircleBorder(side: BorderSide(width: 3,color: Color(0xFFA8E6C1))),
-          child: Icon(Icons.add_rounded,),
+        child: FloatingActionButton(backgroundColor: Colors.white,elevation: 0,shape:CircleBorder(side: BorderSide(width: 3,color: CustomColors.floating(context))),
+          child: Icon(Icons.add_rounded,color: CustomColors.floatingicon(context),),
           onPressed: (){
             Navigator.push(
                 context,
