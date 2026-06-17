@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/colors/colors.dart';
 import 'package:task_app/resources/main_screen.dart';
 import 'package:task_app/resources/custom.dart';
 
@@ -15,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFECFCF3),
+      backgroundColor:CustomColors.backgroundColor(context),
       body: Container(
         child: Column(
           // mainAxisAlignment:.center,
@@ -32,6 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
               "Keep It All In\nOne Place",
               textAlign: TextAlign.center,
               style: TextStyle(
+                color: CustomColors.blacktext(context),
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.5,
@@ -145,7 +147,7 @@ class _SplashScreenState extends State<SplashScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey.shade700,
+            color: CustomColors.greytext(context),
             height: 1.6,
           ),
         ),
@@ -158,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20),
         padding: EdgeInsets.all(2),
-        decoration: BoxDecoration(color: Color(0xFFECFCF3)),
+        decoration: BoxDecoration(color:CustomColors.backgroundColor(context)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -168,7 +170,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   "50+",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey.shade700,
+                    color: CustomColors.greytext(context),
                     height: 1.6,
                   ),
                 ),
@@ -176,7 +178,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   "Tasks",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey.shade700,
+                    color: CustomColors.greytext(context),
                     height: 1.6,
                   ),
                 ),
@@ -188,7 +190,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   "24/7",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey.shade700,
+                    color: CustomColors.greytext(context),
                     height: 1.6,
                   ),
                 ),
@@ -196,7 +198,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   "Access",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey.shade700,
+                    color: CustomColors.greytext(context),
                     height: 1.6,
                   ),
                 ),
@@ -208,7 +210,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   "100%",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey.shade700,
+                    color: CustomColors.greytext(context),
                     height: 1.6,
                   ),
                 ),
@@ -216,7 +218,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   "Free",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey.shade700,
+                    color: CustomColors.greytext(context),
                     height: 1.6,
                   ),
                 ),
@@ -232,7 +234,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 40),
       padding: EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(color: Color(0xFFECFCF3)),
+      decoration: BoxDecoration(color:CustomColors.backgroundColor(context)),
       child: Column(
         children: [
           Icon(Icons.trending_up_rounded, size: 35, color: Color(0xFF84C5A5)),
@@ -242,7 +244,7 @@ class _SplashScreenState extends State<SplashScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey.shade700,
+              color: CustomColors.greytext(context),
               fontWeight: FontWeight.w800,
             ),
           ),

@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TaskProvider extends ChangeNotifier {
+  bool _isDarkMode = false;
+  bool get isDarkMode => _isDarkMode;
+  void toggleTheme() {
+    _isDarkMode = !_isDarkMode;
+    notifyListeners();
+  }
   List<Map<String, dynamic>> tasks = [
     {
       'title': 'Learn Flutter',
@@ -30,11 +36,11 @@ class TaskProvider extends ChangeNotifier {
       'category': 'work',
     },
   ];
-  TimeOfDay? _startTime;
-  TimeOfDay? _endTime;
+  String? _startTime;
+  String? _endTime;
 
-  TimeOfDay? get startTime => _startTime;
-  TimeOfDay? get endTime => _endTime;
+  String? get startTime => _startTime;
+  String? get endTime => _endTime;
 
   TextEditingController _controller = TextEditingController();
   TextEditingController get controller => _controller;
@@ -73,7 +79,6 @@ class TaskProvider extends ChangeNotifier {
       'endTime': endTime,
       'category': category,
     });
-
     notifyListeners();
   }
 
@@ -99,8 +104,8 @@ class TaskProvider extends ChangeNotifier {
     filteredLists[index]['title'] = controller.value.text;
     filteredLists[index]['description'] = descriptioncontroller.value.text;
     filteredLists[index]['date'] = datecontroller.value.text;
-    filteredLists[index]['startTime'] = startTimeController.value.text;
-    filteredLists[index]['endTime'] = endTimeController.value.text;
+    filteredLists[index]['startTime'] = _startTime;
+    filteredLists[index]['endTime'] = _endTime;
     filteredLists[index]['category'] = categorycontroller.value.text;
     notifyListeners();
   }
@@ -129,7 +134,10 @@ class TaskProvider extends ChangeNotifier {
       is24HourMode: false,
     );
     if (dateTime != null) {
-      _startTimeController.text=DateFormat('hh:mm a').format(dateTime);
+      _startTime=_startTimeController.value.text;
+      _startTime = DateFormat('hh:mm a').format(dateTime);
+     _startTime == null ? "7:00 am" :_startTime;
+
     }
     notifyListeners();
   }
@@ -140,8 +148,13 @@ class TaskProvider extends ChangeNotifier {
      type: OmniDateTimePickerType.time,
     );
     if (picked != null) {
-      _endTimeController.text=DateFormat('hh:mm a').format(picked);
+      _endTime=_endTimeController.value.text;
+      _endTime =DateFormat('hh:mm a').format(picked);
+      _endTime==null ?"7:00 pm":_endTime;
     }
     notifyListeners();
   }
+
 }
+
+

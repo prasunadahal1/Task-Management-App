@@ -1,12 +1,16 @@
 import 'package:date_picker_timeline/extra/color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_app/colors/colors.dart';
 import 'package:task_app/providers/task_providers.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:task_app/resources/custom.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:task_app/screens/addtask_screen.dart';
+import 'package:task_app/screens/profile_screen.dart';
 import 'package:task_app/screens/taskupdate_screen.dart';
+
+import '../providers/theme_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,52 +23,44 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Color(0xFFECFCF3),
+      backgroundColor: CustomColors.backgroundColor(context),
       appBar: AppBar(
-        backgroundColor:Color(0xFFECFCF3),
+        backgroundColor:CustomColors.appbar(context),
         title: Column(
           children: [
             SizedBox(height:5),
-            Text('Hi,User!',style: TextStyle(fontWeight: FontWeight.w500),),
-            Text('Todays task list',style: TextStyle(fontWeight: FontWeight.w400,color: Colors.grey.shade700,fontSize:18)),
+            Text('Hi,User!',style: TextStyle(fontWeight: FontWeight.w500,color: CustomColors.blacktext(context)),),
+            Text('Todays task list',style: TextStyle(fontWeight: FontWeight.w400,color:CustomColors.greytext(context),fontSize:18)),
           ],
         ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Column(
-                spacing: 5,
-                children: [
-                  CircleAvatar(
-                    radius: 32,
-                    backgroundImage: NetworkImage(
-                      "https://thumbs.dreamstime.com/b/empty-tomb-dark-cave-bright-light-stone-slab-candle-religious-easter-concept-resurrection-image-ai-generated-416471218.jpg?w=992",
-                    ),
-                  ),
-                  Text("Prasuna Dahal"),
-                  Text("prasunadahal909@gmail.com"),
-                ],
+        actions: [
+          Consumer<TaskProvider>(
+            builder: (context,provider,_){
+              return  IconButton(
+                onPressed: (){
+                  provider.toggleTheme();
+                },
+                icon:Icon(provider.isDarkMode?
+                Icons.light_mode:Icons.dark_mode),
+              );
+            },
+          ),
+          SizedBox(width:15),
+          Padding(
+            padding:EdgeInsetsGeometry.only(right: 15),
+            child:GestureDetector(
+              onTap:(){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen(),));
+              },
+              child:   CircleAvatar(
+                backgroundColor: Color(0xFF84C5A5),
+                radius: 16,
+                child: Icon(Icons.person),
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.settings, size: 32, color: Color(0xFFA8E6C1)),
-              title: Text("Settings"),
-              //subtitle: Text("You can change settings"),
-            ),
-            ListTile(
-              leading: Icon(Icons.sunny, size: 32, color:Color(0xFFA8E6C1)),
-              title: Text("Theme"),
-             // subtitle: Text("You can change theme"),
-            ),
-            ListTile(
-              leading: Icon(Icons.more, size: 32, color:Color(0xFFA8E6C1)),
-              title: Text("More"),
-              //subtitle: Text("More details"),
-            ),
-          ],
-        ),
+
+          ),
+        ],
       ),
       body: Consumer<TaskProvider>(
         builder:(context,p,_){
@@ -79,9 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 80,
                   initialSelectedDate: DateTime.now(),
                   selectionColor:Color(0xFFA8E6C1),
-                  selectedTextColor: Colors.black,
-
+                  selectedTextColor: CustomColors.datepickertext(context),
+                 deactivatedColor: Colors.blue,
                 ),
+
                 SizedBox(height: 20),
                 TextFormField(onChanged:(value){
                   p.updateSearch(value);
