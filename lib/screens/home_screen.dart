@@ -25,185 +25,246 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: CustomColors.backgroundColor(context),
       appBar: AppBar(
-        backgroundColor:CustomColors.appbar(context),
+        backgroundColor: CustomColors.appbar(context),
         title: Column(
           children: [
-            SizedBox(height:5),
-            Text('Hi,User!',style: TextStyle(fontWeight: FontWeight.w500,color: CustomColors.blacktext(context)),),
-            Text('Todays task list',style: TextStyle(fontWeight: FontWeight.w400,color:CustomColors.greytext(context),fontSize:18)),
+            SizedBox(height: 5),
+            Text(
+              'Hi,User!',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: CustomColors.blacktext(context),
+              ),
+            ),
+            Text(
+              'Todays task list',
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: CustomColors.greytext(context),
+                fontSize: 18,
+              ),
+            ),
           ],
         ),
         actions: [
           Consumer<TaskProvider>(
-            builder: (context,provider,_){
-              return  IconButton(
-                onPressed: (){
+            builder: (context, provider, _) {
+              return IconButton(
+                onPressed: () {
                   provider.toggleTheme();
                 },
-                icon:Icon(provider.isDarkMode?
-                Icons.light_mode:Icons.dark_mode),
+                icon: Icon(
+                  provider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                ),
               );
             },
           ),
-          SizedBox(width:15),
+          SizedBox(width: 15),
           Padding(
-            padding:EdgeInsetsGeometry.only(right: 15),
-            child:GestureDetector(
-              onTap:(){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen(),));
+            padding: EdgeInsetsGeometry.only(right: 15),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+                );
               },
-              child:   CircleAvatar(
+              child: CircleAvatar(
                 backgroundColor: Color(0xFF84C5A5),
                 radius: 16,
                 child: Icon(Icons.person),
               ),
             ),
-
           ),
         ],
       ),
       body: Consumer<TaskProvider>(
-        builder:(context,p,_){
+        builder: (context, p, _) {
           return Container(
             margin: EdgeInsets.only(top: 40),
             child: Column(
               children: [
                 DatePicker(
-                  daysCount:30,
+                  daysCount: 30,
                   DateTime.now(),
                   height: 100,
                   width: 80,
                   initialSelectedDate: DateTime.now(),
-                  selectionColor:Color(0xFFA8E6C1),
+                  selectionColor: Color(0xFFA8E6C1),
                   selectedTextColor: CustomColors.datepickertext(context),
-                 deactivatedColor: Colors.blue,
+                  deactivatedColor: Colors.blue,
                 ),
 
                 SizedBox(height: 20),
-                TextFormField(onChanged:(value){
-                  p.updateSearch(value);
-                },
-                  decoration:InputDecoration(
-                    hintText:'Search',prefixIcon: Icon(Icons.search),
-                    fillColor: Colors.black,border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25))),),
+                TextFormField(
+                  onChanged: (value) {
+                    p.searchFilter(value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    prefixIcon: Icon(Icons.search),
+                    fillColor: Colors.black,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                ),
 
-                SizedBox(height:10),
+                SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
-                    itemCount:p.filteredLists.length,
-                    itemBuilder:(context,index){
+                    itemCount: p.filteredLists.length,
+                    itemBuilder: (context, index) {
                       return Slidable(
                         endActionPane: ActionPane(
-                            motion:StretchMotion(),
-                            children: [
-                              SlidableAction(onPressed:(_){
-                                showDialog(context: context, builder: (context){
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadiusGeometry.circular(20),
-                                    ),
-                                    title: Text('Edit Task',
-                                      textAlign:TextAlign.center,
-                                      style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,
+                          motion: StretchMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (_) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadiusGeometry.circular(20),
                                       ),
-                                    ),
-                                    content:SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          TextFormField(controller: p.controller,
-                                            decoration: InputDecoration(
+                                      title: Text(
+                                        'Edit Task',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      content: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            TextFormField(
+                                              controller: p.controller,
+                                              decoration: InputDecoration(
                                                 labelText: 'Title',
-                                              prefixIcon:Icon(Icons.title),
-                                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))
-                                            ),
-                                            textAlign: TextAlign.center,
-                                            autofocus: true,
-                                          ),
-                                          SizedBox(height: 15),
-                                          TextFormField(controller: p.descriptioncontroller,
-                                            decoration: InputDecoration(
-                                              prefixIcon: Icon(Icons.description),
+                                                prefixIcon: Icon(Icons.title),
                                                 border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(12)
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                 ),
-                                                labelText:'Description'
+                                              ),
+                                              textAlign: TextAlign.center,
+                                              autofocus: true,
                                             ),
-                                            textAlign: TextAlign.center,
-                                            autofocus: true,
-                                          ),
-                                          SizedBox(height: 15),
-                                          TextFormField(controller: p.datecontroller,
-                                            decoration:InputDecoration(
-                                              labelText: 'Select Date',
-                                              suffixIcon: Icon(Icons.calendar_today_rounded,),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(12)
-                                              )
-                                              //hintText:'Time'
+                                            SizedBox(height: 15),
+                                            TextFormField(
+                                              controller:
+                                                  p.descriptioncontroller,
+                                              decoration: InputDecoration(
+                                                prefixIcon: Icon(
+                                                  Icons.description,
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                labelText: 'Description',
+                                              ),
+                                              textAlign: TextAlign.center,
+                                              autofocus: true,
                                             ),
-                                            onTap: () async {
-                                              p.pickDate(context);
-                                            },
-                                            textAlign: TextAlign.center,
-                                            autofocus: true,
-                                          ),
-                                          SizedBox(height: 15),
-                                          TextFormField(controller: p.startTimeController,
-                                            decoration:InputDecoration(
-                                              labelText: 'Start Time',
-                                              prefixIcon: Icon(Icons.access_time),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(12)
-                                              )
+                                            SizedBox(height: 15),
+                                            TextFormField(
+                                              controller: p.datecontroller,
+                                              decoration: InputDecoration(
+                                                labelText: 'Select Date',
+                                                suffixIcon: Icon(
+                                                  Icons.calendar_today_rounded,
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                //hintText:'Time'
+                                              ),
+                                              onTap: () async {
+                                                p.pickDate(context);
+                                              },
+                                              textAlign: TextAlign.center,
+                                              autofocus: true,
                                             ),
-                                            onTap: () async {
-                                              p.pickStartTime(context);
-                                            },
-                                            textAlign: TextAlign.center,
-                                            autofocus: true,
-                                          ),
-                                          SizedBox(height: 15),
-                                          TextFormField(controller: p.endTimeController,
-                                            decoration:InputDecoration(
-                                              labelText: 'End Time',
-                                              prefixIcon: Icon(Icons.schedule),
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(12),
-                                              )
+                                            SizedBox(height: 15),
+                                            TextFormField(
+                                              controller: p.startTimeController,
+                                              decoration: InputDecoration(
+                                                labelText: 'Start Time',
+                                                prefixIcon: Icon(
+                                                  Icons.access_time,
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onTap: () async {
+                                                p.pickStartTime(context);
+                                              },
+                                              textAlign: TextAlign.center,
+                                              autofocus: true,
                                             ),
-                                            onTap: () async {
-                                              p.pickEndTime(context);
-                                            },
-                                            textAlign: TextAlign.center,
-                                            autofocus: true,
-                                          ),
-                                        ],
+                                            SizedBox(height: 15),
+                                            TextFormField(
+                                              controller: p.endTimeController,
+                                              decoration: InputDecoration(
+                                                labelText: 'End Time',
+                                                prefixIcon: Icon(
+                                                  Icons.schedule,
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onTap: () async {
+                                                p.pickEndTime(context);
+                                              },
+                                              textAlign: TextAlign.center,
+                                              autofocus: true,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    actions: [
-                                      CustomElevatedButton(onPressed:()async{
-                                        p.editTask(index);
-                                        Navigator.pop(context);
-                                      },
-                                          widget:Text('Edit'))
-                                    ],
-                                  );
-                                });
+                                      actions: [
+                                        CustomElevatedButton(
+                                          onPressed: () async {
+                                            p.editTask(index);
+                                            Navigator.pop(context);
+                                          },
+                                          widget: Text('Edit'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
-                                backgroundColor: Color(0xFFECFCF3),
-                                icon: Icons.edit,foregroundColor: Color(0xFF84C5A5),
-                                label: 'Edit',
-                              ),
-                              SlidableAction(onPressed:(_){
+                              backgroundColor: Color(0xFFECFCF3),
+                              icon: Icons.edit,
+                              foregroundColor: Color(0xFF84C5A5),
+                              label: 'Edit',
+                            ),
+                            SlidableAction(
+                              onPressed: (_) {
                                 p.deleteTask(index);
-                              },backgroundColor: Color(0xFFECFCF3),
-                                icon: Icons.delete,foregroundColor: Colors.red,
-                                label: 'Delete',
-                              )
-                            ]),
+                              },
+                              backgroundColor: Color(0xFFECFCF3),
+                              icon: Icons.delete,
+                              foregroundColor: Colors.red,
+                              label: 'Delete',
+                            ),
+                          ],
+                        ),
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal:16,vertical:8),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -212,9 +273,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.15),
                                 blurRadius: 8,
-                                offset:Offset(0, 4),
-                              )
-                            ]
+                                offset: Offset(0, 4),
+                              ),
+                            ],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,21 +290,55 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Color(0xFF84C5A5),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    child: Icon(Icons.task,color: Colors.white,size: 30,),
+                                    child: Icon(
+                                      Icons.task,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
                                   ),
-                                  SizedBox(width:20),
-                                  Expanded(child:Column(
-                                    crossAxisAlignment: .start,
-                                    children: [
-                                      Text(p.filteredLists[index]['title'],style: TextStyle(
-                                        fontSize: 16,fontWeight: FontWeight.bold,
-                                      ),),
-                                      Text(p.filteredLists[index]['description'],style: TextStyle(color: Colors.grey.shade700,fontSize: 13),),
-                                      Text('${p.filteredLists[index]['startTime']}-${p.filteredLists[index]['endTime']}',style: TextStyle(color: Colors.grey.shade700,fontSize: 13),),
-                                      Text(p.filteredLists[index]['category'],style: TextStyle(color: Colors.grey.shade700,fontSize: 12),),
-                                    ],
-                                  )),
-                                  Text(p.filteredLists[index]['date'],style: TextStyle(color: Colors.grey.shade700,fontSize: 12),),
+                                  SizedBox(width: 20),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: .start,
+                                      children: [
+                                        Text(
+                                          p.filteredLists[index]['title'],
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          p.filteredLists[index]['description'],
+                                          style: TextStyle(
+                                            color: Colors.grey.shade700,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${p.filteredLists[index]['startTime']}-${p.filteredLists[index]['endTime']}',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade700,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                        Text(
+                                          p.filteredLists[index]['category'],
+                                          style: TextStyle(
+                                            color: Colors.grey.shade700,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    p.filteredLists[index]['date'],
+                                    style: TextStyle(
+                                      color: Colors.grey.shade700,
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -257,9 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-
       ),
     );
   }
 }
-

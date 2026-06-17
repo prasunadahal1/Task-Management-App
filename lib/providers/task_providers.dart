@@ -10,7 +10,7 @@ class TaskProvider extends ChangeNotifier {
     _isDarkMode = !_isDarkMode;
     notifyListeners();
   }
-  List<Map<String, dynamic>> tasks = [
+  List<Map<String, dynamic>> _tasks = [
     {
       'title': 'Learn Flutter',
       'description': 'Add Details',
@@ -62,6 +62,7 @@ class TaskProvider extends ChangeNotifier {
 
   List<Map<String, dynamic>> _filteredLists = [];
   List<Map<String, dynamic>> get filteredLists => _filteredLists;
+  List<Map<String, dynamic>> get tasks => _tasks;
 
   void addTask(
     String title,
@@ -110,19 +111,30 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSearch(String keyword) {
+  TaskProvider() {
+    _filteredLists = List<Map<String, dynamic>>.from(_tasks);
+  }
+
+  void searchFilter(String keyword) {
     String normalize(String text) =>
         text.toLowerCase().replaceAll(RegExp(r'\s+'), '').trim();
     final String normalizedKeyword = normalize(keyword);
     if (keyword.isEmpty) {
-      _filteredLists = List<Map<String, dynamic>>.from(tasks);
+      _filteredLists = List<Map<String, dynamic>>.from(_tasks);
     } else {
-      _filteredLists = tasks.where((info) {
+      _filteredLists = _tasks.where((info) {
         final String normalizedName = normalize(info['title'].toString());
-        // final String normalizedId =info['author']['id'].toString();
         return normalizedName.contains(normalizedKeyword);
-        // ||normalizedId.contains(normalizedKeyword);
       }).toList();
+
+
+      // _filteredLists = _tasks.where((info) {
+      //
+      //   final String normalizedName = normalize(info['title'].toString());
+      //   // final String normalizedId =info['author']['id'].toString();
+      //   return normalizedName.contains(normalizedKeyword);
+      //   // ||normalizedId.contains(normalizedKeyword);
+      // }).toList();
     }
     notifyListeners();
   }
@@ -134,10 +146,8 @@ class TaskProvider extends ChangeNotifier {
       is24HourMode: false,
     );
     if (dateTime != null) {
-      _startTime=_startTimeController.value.text;
       _startTime = DateFormat('hh:mm a').format(dateTime);
-     _startTime == null ? "7:00 am" :_startTime;
-
+      _startTimeController.text = _startTime!;
     }
     notifyListeners();
   }
@@ -148,9 +158,8 @@ class TaskProvider extends ChangeNotifier {
      type: OmniDateTimePickerType.time,
     );
     if (picked != null) {
-      _endTime=_endTimeController.value.text;
       _endTime =DateFormat('hh:mm a').format(picked);
-      _endTime==null ?"7:00 pm":_endTime;
+      _endTimeController.text = _endTime!;
     }
     notifyListeners();
   }

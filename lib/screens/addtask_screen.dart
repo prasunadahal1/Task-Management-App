@@ -236,7 +236,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                        autofocus: true,
                      ),
                      // Divider(color: Colors.white54),
-                     TextFormField(controller: p.startTimeController,
+                     TextFormField(controller: p.endTimeController,
                        decoration:InputDecoration(
                          labelText: 'End Time',
                          labelStyle: TextStyle(color:Colors.white),
