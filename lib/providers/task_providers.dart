@@ -1,9 +1,19 @@
+import 'dart:ffi';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class TaskProvider extends ChangeNotifier {
+  Uint8List? _image;
+  Uint8List? get image => _image;
+
+  Uint8List? _img;
+  Uint8List? get img => _img;
+
   bool _isDarkMode = false;
   bool get isDarkMode => _isDarkMode;
   void toggleTheme() {
@@ -82,6 +92,13 @@ class TaskProvider extends ChangeNotifier {
     });
     notifyListeners();
   }
+  void controllerclear(){
+    controller.clear();
+    descriptioncontroller.clear();
+    datecontroller.clear();
+    startTimeController.clear();
+    endTimeController.clear();
+  }
 
   void pickDate(context) async {
     DateTime? pickDate = await showDatePicker(
@@ -114,7 +131,6 @@ class TaskProvider extends ChangeNotifier {
   TaskProvider() {
     _filteredLists = List<Map<String, dynamic>>.from(_tasks);
   }
-
   void searchFilter(String keyword) {
     String normalize(String text) =>
         text.toLowerCase().replaceAll(RegExp(r'\s+'), '').trim();
@@ -126,8 +142,6 @@ class TaskProvider extends ChangeNotifier {
         final String normalizedName = normalize(info['title'].toString());
         return normalizedName.contains(normalizedKeyword);
       }).toList();
-
-
       // _filteredLists = _tasks.where((info) {
       //
       //   final String normalizedName = normalize(info['title'].toString());
@@ -162,6 +176,30 @@ class TaskProvider extends ChangeNotifier {
       _endTimeController.text = _endTime!;
     }
     notifyListeners();
+  }
+
+Future<dynamic> pickImage(ImageSource source) async{
+    final ImagePicker _imagepicker =ImagePicker();
+    XFile? _file= await _imagepicker.pickImage(source: source);
+
+    if (_file != null) {
+        return await _file.readAsBytes();
+    }
+    notifyListeners();
+}
+
+ Future<dynamic> selectImage()async{
+   _image = await pickImage(ImageSource.gallery);
+  if (_img!= null){
+    _image=_img!;
+  }
+  notifyListeners();
+}
+void toastMessageAdd(){
+  Fluttertoast.showToast(msg: 'Task Added Successfully',fontSize: 18,gravity: ToastGravity.BOTTOM);
+}
+  void toastMessageEdit(){
+    Fluttertoast.showToast(msg: 'Task Edited Successfully',fontSize: 18,gravity: ToastGravity.BOTTOM);
   }
 
 }

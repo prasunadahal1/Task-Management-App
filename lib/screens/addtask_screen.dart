@@ -3,6 +3,8 @@ import 'package:task_app/colors/colors.dart';
 import 'package:task_app/providers/task_providers.dart';
 import 'package:provider/provider.dart';
 import 'package:task_app/resources/custom.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:task_app/screens/home_screen.dart';
 
 class AddtaskScreen extends StatefulWidget {
   const AddtaskScreen({super.key});
@@ -16,7 +18,9 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         leading: IconButton(onPressed:(){}, icon: Icon(Icons.arrow_back_ios),color:Colors.white),
+         leading: IconButton(onPressed:(){
+           Navigator.pop(context);
+         }, icon: Icon(Icons.arrow_back_ios),color:Colors.white),
         centerTitle: true,
         backgroundColor:CustomColors.primarygreen(context),
         title: Text('Create New Task',style: TextStyle(color: Colors.white),),
@@ -232,7 +236,6 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                        onTap: () async {
                          p.pickStartTime(context);
                        },
-                       textAlign: TextAlign.center,
                        autofocus: true,
                      ),
                      // Divider(color: Colors.white54),
@@ -245,7 +248,6 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                        onTap: () async {
                          p.pickEndTime(context);
                        },
-                       textAlign: TextAlign.center,
                        autofocus: true,
                      ),
                    ],
@@ -339,9 +341,12 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                                p.endTimeController.text.trim(),
                                p.categorycontroller.text.trim(),
                              );
+                             p.controllerclear();
+                              // p.toastMessageAdd();
                            }
                            Navigator.pop(context);
-                         },
+                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Added Task Sucessfully')));
+                           },
                          widget: Text('Create Task'),
                        ),
                      ],

@@ -62,18 +62,22 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 15),
           Padding(
             padding: EdgeInsetsGeometry.only(right: 15),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+            child: Consumer<TaskProvider>(
+              builder: (context,p,_){
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()),
+                    );
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: p.image!=null? MemoryImage(p.image!):NetworkImage('https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80'),
+                    backgroundColor: Color(0xFF84C5A5),
+                    radius: 20,
+                  ),
                 );
               },
-              child: CircleAvatar(
-                backgroundColor: Color(0xFF84C5A5),
-                radius: 16,
-                child: Icon(Icons.person),
-              ),
             ),
           ),
         ],
@@ -235,7 +239,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CustomElevatedButton(
                                           onPressed: () async {
                                             p.editTask(index);
+                                            p.toastMessageEdit();
                                             Navigator.pop(context);
+
                                           },
                                           widget: Text('Edit'),
                                         ),
