@@ -10,6 +10,7 @@ import 'package:task_app/screens/addtask_screen.dart';
 import 'package:task_app/screens/profile_screen.dart';
 import 'package:task_app/screens/taskupdate_screen.dart';
 
+import '../providers/task_providers.dart';
 import '../providers/theme_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,29 +22,40 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    final TaskProvider taskProvider= Provider.of<TaskProvider>(context,listen: false);
+    super.initState();
+    taskProvider.getData();
+   taskProvider.data;
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.backgroundColor(context),
       appBar: AppBar(
+        elevation: 0.5,
+        shadowColor: Colors.black.withOpacity(0.4),
         backgroundColor: CustomColors.appbar(context),
         title: Column(
           children: [
-            SizedBox(height: 5),
+            SizedBox(height: 13),
             Text(
-              'Hi,User!',
+              'Hi, User!',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: CustomColors.blacktext(context),
+                fontSize: 20,
               ),
             ),
             Text(
-              'Todays task list',
+              'Have a nice day!',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 color: CustomColors.greytext(context),
-                fontSize: 18,
+                fontSize: 15,
               ),
             ),
+            SizedBox(height: 10),
           ],
         ),
         actions: [
@@ -59,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
-          SizedBox(width: 15),
+          SizedBox(width:15),
           Padding(
             padding: EdgeInsetsGeometry.only(right: 15),
             child: Consumer<TaskProvider>(
@@ -85,36 +97,66 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Consumer<TaskProvider>(
         builder: (context, p, _) {
           return Container(
-            margin: EdgeInsets.only(top: 40),
+            margin: EdgeInsets.only(top:30),
             child: Column(
               children: [
-                DatePicker(
-                  daysCount: 30,
-                  DateTime.now(),
-                  height: 100,
-                  width: 80,
-                  initialSelectedDate: DateTime.now(),
-                  selectionColor: Color(0xFFA8E6C1),
-                  selectedTextColor: CustomColors.datepickertext(context),
-                  deactivatedColor: Colors.blue,
+                Container(
+            margin: EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(vertical:5),
+            decoration: BoxDecoration(
+              color: CustomColors.card(context),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: CustomColors.cardborder(context),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.25),
+                  blurRadius:8,
+                  offset: Offset(0,2),
                 ),
-
-                SizedBox(height: 20),
-                TextFormField(
-                  onChanged: (value) {
-                    p.searchFilter(value);
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    prefixIcon: Icon(Icons.search),
-                    fillColor: Colors.black,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+              ],
+            ),
+                  child: DatePicker(
+                    daysCount: 30,
+                    DateTime.now(),
+                    height: 100,
+                    width: 80,
+                    initialSelectedDate: DateTime.now(),
+                    selectionColor: Color(0xFF84C5A5),
+                    selectedTextColor:Colors.black,
+                    deactivatedColor: Color(0xFFB0B0B0),
                   ),
                 ),
+                SizedBox(height: 20),
 
-                SizedBox(height: 10),
+                Container(
+                  width:MediaQuery.of(context).size.width*0.9,
+                  height:MediaQuery.of(context).size.height*0.08,
+                  child: TextFormField(
+                    onChanged: (value) {
+                      p.searchFilter(value);
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      prefixIcon: Icon(Icons.search),
+                      fillColor: Colors.black,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                        borderSide: BorderSide(color: Color(0xFF84C5A5),width: 1)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                        borderSide: BorderSide(
+                          color: Color(0xFF84C5A5),
+                          width:1.5,
+                        ),
+                      ),
+                    ),
+
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: p.filteredLists.length,
@@ -125,6 +167,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             SlidableAction(
                               onPressed: (_) {
+                                p.initEditTask(title: p.filteredLists[index]['title'],
+                                    desc:p.filteredLists[index]['description'],
+                                    date: p.filteredLists[index]['date'],
+                                    startTime: p.filteredLists[index]['startTime'],
+                                    endTime: p.filteredLists[index]['endTime'],
+                                    category:p.filteredLists[index]['category']);
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -154,7 +202,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              textAlign: TextAlign.center,
                                               autofocus: true,
                                             ),
                                             SizedBox(height: 15),
@@ -171,7 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 labelText: 'Description',
                                               ),
-                                              textAlign: TextAlign.center,
                                               autofocus: true,
                                             ),
                                             SizedBox(height: 15),
@@ -191,7 +237,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               onTap: () async {
                                                 p.pickDate(context);
                                               },
-                                              textAlign: TextAlign.center,
                                               autofocus: true,
                                             ),
                                             SizedBox(height: 15),
@@ -210,7 +255,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               onTap: () async {
                                                 p.pickStartTime(context);
                                               },
-                                              textAlign: TextAlign.center,
                                               autofocus: true,
                                             ),
                                             SizedBox(height: 15),
@@ -229,7 +273,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               onTap: () async {
                                                 p.pickEndTime(context);
                                               },
-                                              textAlign: TextAlign.center,
                                               autofocus: true,
                                             ),
                                           ],
@@ -238,10 +281,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                       actions: [
                                         CustomElevatedButton(
                                           onPressed: () async {
-                                            p.editTask(index);
-                                            p.toastMessageEdit();
+                                            p.clearControllers();
                                             Navigator.pop(context);
-
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                    backgroundColor: Colors.white,
+                                                    behavior: SnackBarBehavior.floating,
+                                                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 180,left: 16,right: 16),
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(15)),
+                                                    content: Row(
+                                                      children: [
+                                                        Icon(Icons.check_circle, color: Color(0xFF84C5A5)),
+                                                        SizedBox(width: 10),
+                                                        Text('Edited Task Sucessfully',style: TextStyle(color:Colors.black),),
+                                                      ],
+                                                    )));
                                           },
                                           widget: Text('Edit'),
                                         ),
@@ -250,16 +304,55 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                 );
                               },
-                              backgroundColor: Color(0xFFECFCF3),
+                              backgroundColor: CustomColors.editdeletepanel(context),
                               icon: Icons.edit,
                               foregroundColor: Color(0xFF84C5A5),
                               label: 'Edit',
                             ),
                             SlidableAction(
                               onPressed: (_) {
-                                p.deleteTask(index);
+                               showDialog(context: context, builder:(context){
+                                 return AlertDialog(
+                                   shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.circular(20),
+                                   ),
+                                   title: Text('Are you sure you want to delete?',textAlign:TextAlign.center,style: TextStyle(fontSize:20),),
+                                   actionsAlignment: MainAxisAlignment.center,
+                                   actions: [
+                                     OutlinedButton(
+                                       onPressed: () {
+                                   Navigator.pop(context);
+                                 }, child: Text('No',style: TextStyle(color: Color(0xFF84C5A5)),),style:OutlinedButton.styleFrom(side: BorderSide(color: Color(0xFF84C5A5))),),
+                                     OutlinedButton(
+                                       onPressed: () {
+                                         p.deleteTask(index);
+                                         Navigator.pop(context);
+                                         ScaffoldMessenger.of(context).showSnackBar(
+                                             SnackBar(
+                                                 backgroundColor: Colors.white,
+                                                 behavior: SnackBarBehavior.floating,
+                                                 margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 180,left: 16,right: 16),
+                                                 shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(15)),
+                                                 content: Row(
+                                                   children: [
+                                                     Icon(Icons.check_circle, color: Color(0xFF84C5A5)),
+                                                     SizedBox(width: 10),
+                                                     Text('Deleted Task Sucessfully',style: TextStyle(color:Colors.black),),
+                                                   ],
+                                                 )));
+                                       }, child: Text('Yes',style: TextStyle(color: Colors.red),),style:OutlinedButton.styleFrom(side: BorderSide(color: Color(0xFF84C5A5)))),
+                                     // TextButton(onPressed: (){
+                                     //   Navigator.pop(context);
+                                     // }, child:Text('No',style: TextStyle(color: Color(0xFF84C5A5)),)),
+                                     // TextButton(onPressed: (){
+                                     //   p.deleteTask(index);
+                                     //   Navigator.pop(context);
+                                     // }, child:Text('Yes',style: TextStyle(color: Colors.red),)),
+                                   ],
+                                 );
+                               });
                               },
-                              backgroundColor: Color(0xFFECFCF3),
+                              backgroundColor: CustomColors.editdeletepanel(context),
                               icon: Icons.delete,
                               foregroundColor: Colors.red,
                               label: 'Delete',
@@ -273,13 +366,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            border: Border.all(color: CustomColors.cardborder(context)),
+                            color: CustomColors.card(context),
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.15),
+                                color: Colors.black.withOpacity(0.3),
                                 blurRadius: 8,
-                                offset: Offset(0, 4),
+                                offset: Offset(0, 3),
                               ),
                             ],
                           ),
@@ -294,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: 60,
                                     decoration: BoxDecoration(
                                       color: Color(0xFF84C5A5),
-                                      borderRadius: BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Icon(
                                       Icons.task,
@@ -312,26 +406,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
+                                            // color: CustomColors.blacktext(context),
                                           ),
                                         ),
                                         Text(
                                           p.filteredLists[index]['description'],
                                           style: TextStyle(
-                                            color: Colors.grey.shade700,
+                                            color: CustomColors.greytext(context),
                                             fontSize: 13,
                                           ),
                                         ),
                                         Text(
                                           '${p.filteredLists[index]['startTime']}-${p.filteredLists[index]['endTime']}',
                                           style: TextStyle(
-                                            color: Colors.grey.shade700,
+                                            color: CustomColors.greytext(context),
                                             fontSize: 13,
                                           ),
                                         ),
                                         Text(
                                           p.filteredLists[index]['category'],
                                           style: TextStyle(
-                                            color: Colors.grey.shade700,
+                                            color: CustomColors.greytext(context),
                                             fontSize: 12,
                                           ),
                                         ),
@@ -341,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     p.filteredLists[index]['date'],
                                     style: TextStyle(
-                                      color: Colors.grey.shade700,
+                                      color: CustomColors.greytext(context),
                                       fontSize: 12,
                                     ),
                                   ),

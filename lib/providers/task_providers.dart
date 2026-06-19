@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:math';
 import 'dart:typed_data';
@@ -6,8 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart';
 
 class TaskProvider extends ChangeNotifier {
+  List<dynamic> _data =[];
+  List<dynamic> get data=> _data;
+  Future<void> getData () async{
+    Response response=await get(Uri.parse('https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo'));
+    _data = jsonDecode(response.body);
+    notifyListeners();
+  }
   Uint8List? _image;
   Uint8List? get image => _image;
 
@@ -46,6 +55,7 @@ class TaskProvider extends ChangeNotifier {
       'category': 'Work',
     },
   ];
+
   String? _startTime;
   String? _endTime;
 
@@ -70,8 +80,8 @@ class TaskProvider extends ChangeNotifier {
   TextEditingController _categorycontroller = TextEditingController();
   TextEditingController get categorycontroller => _categorycontroller;
 
-  List<Map<String, dynamic>> _filteredLists = [];
-  List<Map<String, dynamic>> get filteredLists => _filteredLists;
+  List<dynamic> _filteredLists = [];
+  List<dynamic> get filteredLists => _filteredLists;
   List<Map<String, dynamic>> get tasks => _tasks;
 
   void addTask(
@@ -129,27 +139,54 @@ class TaskProvider extends ChangeNotifier {
   }
 
   TaskProvider() {
-    _filteredLists = List<Map<String, dynamic>>.from(_tasks);
+    _filteredLists = List<dynamic>.from(_data);
   }
+  // void searchFilter(String keyword) {
+  //   String normalize(String text) =>
+  //       text.toLowerCase().replaceAll(RegExp(r'\s+'), '').trim();
+  //   final String normalizedKeyword = normalize(keyword);
+  //   if (keyword.isEmpty) {
+  //     _filteredLists = List<Map<String, dynamic>>.from(_data);
+  //   } else {
+  //     _filteredLists = _data.where((data) {
+  //     return normalize(data.title ?? '')
+  //         .contains(normalizedKeyword);
+  //   }).toList();
+  //     // _filteredLists = _data.where((data) {
+  //     //   final String normalizedName = normalize(data['title'].toString());
+  //     //   return normalizedName.contains(normalizedKeyword);
+  //     // }).toList();
+  //     // _filteredLists = _tasks.where((info) {
+  //     //
+  //     //   final String normalizedName = normalize(info['title'].toString());
+  //     //   // final String normalizedId =info['author']['id'].toString();
+  //     //   return normalizedName.contains(normalizedKeyword);
+  //     //   // ||normalizedId.contains(normalizedKeyword);
+  //     // }).toList();
+  //   }
+  //   notifyListeners();
+  // }
+
   void searchFilter(String keyword) {
     String normalize(String text) =>
         text.toLowerCase().replaceAll(RegExp(r'\s+'), '').trim();
+
     final String normalizedKeyword = normalize(keyword);
+
     if (keyword.isEmpty) {
-      _filteredLists = List<Map<String, dynamic>>.from(_tasks);
+      _filteredLists = List<dynamic>.from(_data);
     } else {
-      _filteredLists = _tasks.where((info) {
-        final String normalizedName = normalize(info['title'].toString());
-        return normalizedName.contains(normalizedKeyword);
+      _filteredLists = _data.where((data) {
+        if (data is Map<String, dynamic>) {
+          final String normalizedName =
+          normalize(data['title']?.toString() ?? '');
+
+          return normalizedName.contains(normalizedKeyword);
+        }
+        return false;
       }).toList();
-      // _filteredLists = _tasks.where((info) {
-      //
-      //   final String normalizedName = normalize(info['title'].toString());
-      //   // final String normalizedId =info['author']['id'].toString();
-      //   return normalizedName.contains(normalizedKeyword);
-      //   // ||normalizedId.contains(normalizedKeyword);
-      // }).toList();
     }
+
     notifyListeners();
   }
 
@@ -195,13 +232,31 @@ Future<dynamic> pickImage(ImageSource source) async{
   }
   notifyListeners();
 }
-void toastMessageAdd(){
-  Fluttertoast.showToast(msg: 'Task Added Successfully',fontSize: 18,gravity: ToastGravity.BOTTOM);
-}
-  void toastMessageEdit(){
-    Fluttertoast.showToast(msg: 'Task Edited Successfully',fontSize: 18,gravity: ToastGravity.BOTTOM);
+  void initEditTask({
+    required String title,
+    required String desc,
+    required String date,
+    required String startTime,
+    required String endTime,
+    required String category,
+  }) {
+    _controller.text = title;
+    _descriptioncontroller.text = desc;
+    _datecontroller.text = date;
+    _startTimeController.text = startTime;
+    _endTimeController.text = endTime;
+    _categorycontroller.text = category;
+    notifyListeners();
   }
 
+  void clearControllers() {
+    _controller.clear();
+    _descriptioncontroller.clear();
+    _datecontroller.clear();
+    _startTimeController.clear();
+    _endTimeController.clear();
+    _categorycontroller.clear();
+  }
 }
 
 

@@ -27,7 +27,7 @@ class CustomElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor:CustomColors.primarygreen(context) ?? Colors.transparent,
+        backgroundColor:CustomColors.addtaskprimarygreen(context) ?? Colors.transparent,
         foregroundColor: Colors.white,
         elevation: 0.0,
         minimumSize: Size(MediaQuery.of(context).size.width * width, height,),
