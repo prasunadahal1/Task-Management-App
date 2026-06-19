@@ -3,6 +3,8 @@ import 'package:task_app/colors/colors.dart';
 import 'package:task_app/providers/task_providers.dart';
 import 'package:provider/provider.dart';
 import 'package:task_app/resources/custom.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:task_app/screens/home_screen.dart';
 
 class AddtaskScreen extends StatefulWidget {
   const AddtaskScreen({super.key});
@@ -16,15 +18,17 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         leading: IconButton(onPressed:(){}, icon: Icon(Icons.arrow_back_ios),color:Colors.white),
+         leading: IconButton(onPressed:(){
+           Navigator.pop(context);
+         }, icon: Icon(Icons.arrow_back_ios),color:Colors.white),
         centerTitle: true,
-        backgroundColor:CustomColors.primarygreen(context),
+        backgroundColor:CustomColors.addtaskprimarygreen(context),
         title: Text('Create New Task',style: TextStyle(color: Colors.white),),
         actions: [
           Icon(Icons.task,color: Colors.white),SizedBox(width:80),
         ],
       ),
-      backgroundColor: CustomColors.primarygreen(context),
+      backgroundColor: CustomColors.addtaskprimarygreen(context),
       body: _body2(context),
     );
   }
@@ -185,7 +189,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                Container(
                  padding: EdgeInsets.symmetric(vertical: 0,horizontal: 16),
                  decoration: BoxDecoration(
-                   color: CustomColors.primarygreen(context),
+                   color: CustomColors.addtaskprimarygreen(context),
                    borderRadius: BorderRadius.only(),
                  ),
                  child: Column(
@@ -232,7 +236,6 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                        onTap: () async {
                          p.pickStartTime(context);
                        },
-                       textAlign: TextAlign.center,
                        autofocus: true,
                      ),
                      // Divider(color: Colors.white54),
@@ -245,7 +248,6 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                        onTap: () async {
                          p.pickEndTime(context);
                        },
-                       textAlign: TextAlign.center,
                        autofocus: true,
                      ),
                    ],
@@ -339,9 +341,24 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                                p.endTimeController.text.trim(),
                                p.categorycontroller.text.trim(),
                              );
+                             p.controllerclear();
+                              // p.toastMessageAdd();
                            }
                            Navigator.pop(context);
-                         },
+                           ScaffoldMessenger.of(context).showSnackBar(
+                               SnackBar(
+                                 backgroundColor: Colors.white,
+                                   behavior: SnackBarBehavior.floating,
+                                   margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 180,left: 16,right: 16),
+                                   shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(15)),
+                                   content: Row(
+                                     children: [
+                                       Icon(Icons.check_circle, color: Color(0xFF84C5A5)),
+                                       SizedBox(width: 10),
+                                       Text('Added Task Sucessfully',style: TextStyle(color:Colors.black),),
+                                     ],
+                                   )));
+                           },
                          widget: Text('Create Task'),
                        ),
                      ],
@@ -361,7 +378,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
      return Chip(
        shape: RoundedSuperellipseBorder(borderRadius: BorderRadius.circular(20)),
        backgroundColor:
-       selected ? CustomColors.primarygreen(context): Color(0xFFEAFBF0),
+       selected ? CustomColors.addtaskprimarygreen(context): Color(0xFFEAFBF0),
        label: Text(
          text,
          style: TextStyle(
