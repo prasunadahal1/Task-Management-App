@@ -12,11 +12,7 @@ import 'package:http/http.dart';
 class TaskProvider extends ChangeNotifier {
   List<dynamic> _data =[];
   List<dynamic> get data=> _data;
-  Future<void> getData () async{
-    Response response=await get(Uri.parse('https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo'));
-    _data = jsonDecode(response.body);
-    notifyListeners();
-  }
+
   Uint8List? _image;
   Uint8List? get image => _image;
 
@@ -138,9 +134,7 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  TaskProvider() {
-    _filteredLists = List<dynamic>.from(_data);
-  }
+
   // void searchFilter(String keyword) {
   //   String normalize(String text) =>
   //       text.toLowerCase().replaceAll(RegExp(r'\s+'), '').trim();
@@ -166,6 +160,16 @@ class TaskProvider extends ChangeNotifier {
   //   }
   //   notifyListeners();
   // }
+  TaskProvider() {
+    _filteredLists = List<dynamic>.from(_data);
+  }
+
+  Future<void> getData () async{
+    Response response=await get(Uri.parse('https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo'));
+    _data = jsonDecode(response.body);
+    _filteredLists = List<dynamic>.from(_data);
+    notifyListeners();
+  }
 
   void searchFilter(String keyword) {
     String normalize(String text) =>
@@ -186,7 +190,6 @@ class TaskProvider extends ChangeNotifier {
         return false;
       }).toList();
     }
-
     notifyListeners();
   }
 
