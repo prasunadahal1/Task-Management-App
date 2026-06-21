@@ -21,12 +21,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   void initState() {
     final TaskProvider taskProvider= Provider.of<TaskProvider>(context,listen: false);
     super.initState();
     taskProvider.getData();
    taskProvider.data;
+
   }
   @override
   Widget build(BuildContext context) {
@@ -154,25 +156,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-
                   ),
                 ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: p.filteredLists.length,
                     itemBuilder: (context, index) {
+
                       return Slidable(
                         endActionPane: ActionPane(
                           motion: StretchMotion(),
                           children: [
                             SlidableAction(
                               onPressed: (_) {
-                                p.initEditTask(title: p.filteredLists[index]['title'],
-                                    desc:p.filteredLists[index]['description'],
-                                    date: p.filteredLists[index]['date'],
-                                    startTime: p.filteredLists[index]['startTime'],
-                                    endTime: p.filteredLists[index]['endTime'],
-                                    category:p.filteredLists[index]['category']);
+                                p.initEditTask(title: p.filteredLists[index]['title']??'',
+                                    desc:p.filteredLists[index]['description']??'',
+                                    date: p.filteredLists[index]['date']??'',
+                                    startTime: p.filteredLists[index]['startTime']??'',
+                                    endTime: p.filteredLists[index]['endTime']??'',
+                                    category:p.filteredLists[index]['category']??'');
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -281,6 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       actions: [
                                         CustomElevatedButton(
                                           onPressed: () async {
+                                            p.editTask(index);
                                             p.clearControllers();
                                             Navigator.pop(context);
                                             ScaffoldMessenger.of(context).showSnackBar(
@@ -311,6 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SlidableAction(
                               onPressed: (_) {
+                                p.setId(p.filteredLists[index]['id']);
                                showDialog(context: context, builder:(context){
                                  return AlertDialog(
                                    shape: RoundedRectangleBorder(
@@ -325,6 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                  }, child: Text('No',style: TextStyle(color: Color(0xFF84C5A5)),),style:OutlinedButton.styleFrom(side: BorderSide(color: Color(0xFF84C5A5))),),
                                      OutlinedButton(
                                        onPressed: () {
+                                         p.deleteData();
                                          p.deleteTask(index);
                                          Navigator.pop(context);
                                          ScaffoldMessenger.of(context).showSnackBar(
