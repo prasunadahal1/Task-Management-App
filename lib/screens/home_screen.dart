@@ -314,7 +314,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SlidableAction(
                               onPressed: (_) {
-                                p.setId(p.filteredLists[index]['id']);
                                showDialog(context: context, builder:(context){
                                  return AlertDialog(
                                    shape: RoundedRectangleBorder(
@@ -329,8 +328,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                  }, child: Text('No',style: TextStyle(color: Color(0xFF84C5A5)),),style:OutlinedButton.styleFrom(side: BorderSide(color: Color(0xFF84C5A5))),),
                                      OutlinedButton(
                                        onPressed: () {
-                                         p.deleteData();
-                                         p.deleteTask(index);
+                                         p.deleteData(p.filteredLists[index]["id"]);
+                                         // p.deleteTask(index);
                                          Navigator.pop(context);
                                          ScaffoldMessenger.of(context).showSnackBar(
                                              SnackBar(
