@@ -333,7 +333,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                          borderRadius: 15,
                          onPressed: () async {
                            if (p.controller.text.trim().isNotEmpty) {
-                             context.read<TaskProvider>().addTask(
+                              await context.read<TaskProvider>().addTask(
                                p.controller.text.trim(),
                                p.descriptioncontroller.text.trim(),
                                p.datecontroller.text.trim(),
@@ -344,8 +344,22 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                              );
                              p.controllerclear();
                            }
-                           Navigator.pop(context);
-
+                           if (context.mounted) {
+                             ScaffoldMessenger.of(context).showSnackBar(
+                                 SnackBar(
+                                     backgroundColor: Colors.white,
+                                     behavior: SnackBarBehavior.floating,
+                                     margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 180,left: 16,right: 16),
+                                     shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(15)),
+                                     content: Row(
+                                       children: [
+                                         Icon(Icons.check_circle, color: Color(0xFF84C5A5)),
+                                         SizedBox(width: 10),
+                                         Text('Added Task Sucessfully',style: TextStyle(color:Colors.black),),
+                                       ],
+                                     )));
+                             Navigator.pop(context);
+                           }
                            },
                          widget: Text('Create Task'),
                        ),
