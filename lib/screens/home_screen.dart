@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final TaskProvider taskProvider= Provider.of<TaskProvider>(context,listen: false);
     super.initState();
     taskProvider.getData();
-   taskProvider.data;
+    taskProvider.data;
 
   }
   @override
@@ -162,7 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ListView.builder(
                     itemCount: p.filteredLists.length,
                     itemBuilder: (context, index) {
-
                       return Slidable(
                         endActionPane: ActionPane(
                           motion: StretchMotion(),
@@ -284,6 +283,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CustomElevatedButton(
                                           onPressed: () async {
                                             p.editTask(index);
+                                            p.editData(p.filteredLists[index]["title"],
+                                                p.filteredLists[index]["description"],
+                                                p.filteredLists[index]["date"],
+                                                p.filteredLists[index]["startTime"],
+                                                p.filteredLists[index]["endTime"],
+                                                p.filteredLists[index]["category"],
+                                                p.filteredLists[index]["id"]);
                                             p.clearControllers();
                                             Navigator.pop(context);
                                             ScaffoldMessenger.of(context).showSnackBar(
@@ -329,6 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                      OutlinedButton(
                                        onPressed: () {
                                          p.deleteData(p.filteredLists[index]["id"]);
+                                         print(p.filteredLists[index]["id"]);
                                          // p.deleteTask(index);
                                          Navigator.pop(context);
                                          ScaffoldMessenger.of(context).showSnackBar(
