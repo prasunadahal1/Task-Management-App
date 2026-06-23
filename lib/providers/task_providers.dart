@@ -105,11 +105,11 @@ class TaskProvider extends ChangeNotifier {
         'title':controller.text,
         'description':descriptioncontroller.text,
         'date':datecontroller.text,
-        'starttime':_startTime,
-        'endtime':_endTime,
+        'startTime':_startTime,
+        'endTime':_endTime,
         'category':categorycontroller.text,
       }),
-    );;
+    );
     notifyListeners();
     print(response.statusCode);
     return response.statusCode==200|| response.statusCode==201;
@@ -137,12 +137,12 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void deleteTask(int index) {
-  //   filteredLists.removeAt(index);
-  //   notifyListeners();
-  // }
+  void deleteTask(int index) {
+    filteredLists.removeAt(index);
+    notifyListeners();
+  }
 
-  void editTask(int index) {
+  void editTask(int index)async {
     filteredLists[index]['title'] = controller.value.text;
     filteredLists[index]['description'] = descriptioncontroller.value.text;
     filteredLists[index]['date'] = datecontroller.value.text;
@@ -150,6 +150,31 @@ class TaskProvider extends ChangeNotifier {
     filteredLists[index]['endTime'] = _endTime;
     filteredLists[index]['category'] = categorycontroller.value.text;
     notifyListeners();
+
+  }
+  Future<bool>editData(String title,
+      String description,
+      String date,
+      String startTime,
+      String endTime,
+      String category,
+      String id
+       )async{
+    Response response =await put(Uri.parse("https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo/$id"),
+      headers:{'content-type':'application/json'},
+      body: jsonEncode({
+        'title':controller.text,
+        'description':descriptioncontroller.text,
+        'date':datecontroller.text,
+        'startTime':_startTime,
+        'endTime':_endTime,
+        'category':categorycontroller.text,
+      }),
+    );
+    notifyListeners();
+    print(response.statusCode);
+    return response.statusCode==200|| response.statusCode==201;
+
   }
   // void searchFilter(String keyword) {
   //   String normalize(String text) =>
@@ -196,6 +221,7 @@ Future<void> deleteData(String id)async{
     Response response=await delete(Uri.parse('https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo/$id'));
     _data.removeWhere((task) => task['id'] == id);
     _filteredLists.removeWhere((task) => task['id'] == id);
+
     notifyListeners();
 }
   void searchFilter(String keyword) {
@@ -262,6 +288,7 @@ Future<dynamic> pickImage(ImageSource source) async{
   }
   notifyListeners();
 }
+
   void initEditTask({
     required String title,
     required String desc,
