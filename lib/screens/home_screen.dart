@@ -280,18 +280,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       actions: [
+                                        CustomElevatedButton(onPressed: ()async {
+                                          p.clearControllers();
+                                          Navigator.pop(context);
+                                        }, widget:Text('cancel')),
                                         CustomElevatedButton(
                                           onPressed: () async {
-                                            p.editTask(index);
-                                            p.editData(p.filteredLists[index]["title"],
+                                            p.editData(
+                                                p.filteredLists[index]["title"],
                                                 p.filteredLists[index]["description"],
-                                                p.filteredLists[index]["date"],
-                                                p.filteredLists[index]["startTime"],
-                                                p.filteredLists[index]["endTime"],
+                                                p.filteredLists[index]["date"].toString(),
+                                                p.filteredLists[index]["startTime"].toString(),
+                                                p.filteredLists[index]["endTime"].toString(),
                                                 p.filteredLists[index]["category"],
-                                                p.filteredLists[index]["id"]);
-                                            p.clearControllers();
-                                            Navigator.pop(context);
+                                                p.filteredLists[index]["id"].toString(),
+                                            );
+                                                p.clearControllers();
+                                                Navigator.pop(context);
                                             ScaffoldMessenger.of(context).showSnackBar(
                                                 SnackBar(
                                                     backgroundColor: Colors.white,
@@ -308,6 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           },
                                           widget: Text('Edit'),
                                         ),
+
                                       ],
                                     );
                                   },
@@ -334,8 +340,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                  }, child: Text('No',style: TextStyle(color: Color(0xFF84C5A5)),),style:OutlinedButton.styleFrom(side: BorderSide(color: Color(0xFF84C5A5))),),
                                      OutlinedButton(
                                        onPressed: () {
-                                         p.deleteData(p.filteredLists[index]["id"]);
                                          print(p.filteredLists[index]["id"]);
+                                         p.deleteData(p.filteredLists[index]["id"].toString());
                                          // p.deleteTask(index);
                                          Navigator.pop(context);
                                          ScaffoldMessenger.of(context).showSnackBar(

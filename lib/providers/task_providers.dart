@@ -6,10 +6,13 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 
 class TaskProvider extends ChangeNotifier {
+
+  String? _title = "";
+  String? get title=>_title;
+
   List<dynamic> _data =[];
   List<dynamic> get data=> _data;
 
@@ -25,6 +28,15 @@ class TaskProvider extends ChangeNotifier {
     _isDarkMode = !_isDarkMode;
     notifyListeners();
   }
+  List<Map<String, dynamic>> _category = [
+    {'title': 'Work', 'isSelected': false},
+    {'title': 'Meeting', 'isSelected': false},
+    {'title': 'Study', 'isSelected': false},
+    {'title': 'Personal', 'isSelected': false},
+    {'title': 'Work', 'isSelected': false},
+    {'title': 'Work', 'isSelected': false},
+    {'title': 'Work', 'isSelected': false},
+  ];
   List<Map<String, dynamic>> _tasks = [
     {
       'title': 'Learn Flutter',
@@ -81,6 +93,14 @@ class TaskProvider extends ChangeNotifier {
   List<dynamic> _filteredLists = [];
   List<dynamic> get filteredLists => _filteredLists;
   List<Map<String, dynamic>> get tasks => _tasks;
+  List<Map<String,dynamic>> get category=>_category;
+
+  void chip( int index,dynamic value){
+    _category[index]['isSelected'] = value;
+    _title=_category[index]['title'];
+    notifyListeners();
+    print(title);
+  }
 
   Future<bool> addTask (
     String title,
@@ -123,7 +143,6 @@ class TaskProvider extends ChangeNotifier {
     endTimeController.clear();
   }
 
-
   void pickDate(context) async {
     DateTime? pickDate = await showDatePicker(
       context: context,
@@ -150,7 +169,6 @@ class TaskProvider extends ChangeNotifier {
     filteredLists[index]['endTime'] = _endTime;
     filteredLists[index]['category'] = categorycontroller.value.text;
     notifyListeners();
-
   }
   Future<bool>editData(String title,
       String description,
@@ -171,9 +189,25 @@ class TaskProvider extends ChangeNotifier {
         'category':categorycontroller.text,
       }),
     );
+    // if(response.statusCode ==200 || response.statusCode ==201){
+    //   final dataIndex = _data.indexWhere((task) => task['id'].toString() == id);
+    //   if(dataIndex != -1){
+    //     _data[dataIndex] = {
+    //       ..._data[dataIndex],
+    //       'title': _controller.text,
+    //       'description': _descriptioncontroller.text,
+    //       'date': _datecontroller.text,
+    //       'startTime': _startTime ?? startTime,
+    //       'endTime': _endTime ?? endTime,
+    //       'category': _categorycontroller.text
+    //     };
+    //   }
+    //
+    // }
+    _filteredLists = List<dynamic>.from(_data);
     notifyListeners();
-    print(response.statusCode);
     return response.statusCode==200|| response.statusCode==201;
+    print(response.statusCode);
 
   }
   // void searchFilter(String keyword) {
@@ -221,9 +255,9 @@ Future<void> deleteData(String id)async{
     Response response=await delete(Uri.parse('https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo/$id'));
     _data.removeWhere((task) => task['id'] == id);
     _filteredLists.removeWhere((task) => task['id'] == id);
-
     notifyListeners();
 }
+
   void searchFilter(String keyword) {
     String normalize(String text) =>
         text.toLowerCase().replaceAll(RegExp(r'\s+'), '').trim();
