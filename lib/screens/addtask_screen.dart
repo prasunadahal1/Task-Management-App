@@ -14,16 +14,6 @@ class AddtaskScreen extends StatefulWidget {
 }
 
 class _AddtaskScreenState extends State<AddtaskScreen> {
-  String? title = "";
-  List<Map<String, dynamic>> category = [
-    {'title': 'work', 'isSelected': false},
-    {'title': 'meeting', 'isSelected': false},
-    {'title': 'study', 'isSelected': false},
-    {'title': 'personal', 'isSelected': false},
-    {'title': 'work', 'isSelected': false},
-    {'title': 'work', 'isSelected': false},
-    {'title': 'work', 'isSelected': false},
-  ];
   bool _isSelected = false;
   @override
   Widget build(BuildContext context) {
@@ -223,6 +213,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                     Divider(color: CustomColors.addtaskdivider(context)),
                     TextFormField(
                       controller: p.descriptioncontroller,
+                      maxLines: 2,
                       decoration: InputDecoration(
                         labelText: 'Description',
                         labelStyle: TextStyle(color: Colors.white),
@@ -281,10 +272,10 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height:10),
               Container(
                 width: MediaQuery.of(context).size.width * 1,
-                height: MediaQuery.of(context).size.height * 0.7,
+                height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
                   border: Border.all(color: CustomColors.cardborder(context)),
                   color: CustomColors.addtaskcategory(context),
@@ -318,33 +309,30 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                             height:42,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemCount: category.length,
+                              itemCount: p.category.length,
                               itemBuilder: (context, index) {
                                 return Row(
                                   children: [
-                                    SizedBox(width: 8,),
+                                    SizedBox(width:8),
                                     ChoiceChip(
                                       shape: RoundedSuperellipseBorder(
                                         borderRadius: BorderRadius.circular(20),
                                       ),
-                                      backgroundColor: category[index]['isSelected']
+                                      backgroundColor: p.category[index]['isSelected']
                                           ? CustomColors.addtaskprimarygreen(context)
                                           : Color(0xFFEAFBF0),
                                       label: Text(
-                                        category[index]['title'],
+                                        p.category[index]['title'],
                                         style: TextStyle(
-                                          color: category[index]['isSelected']
+                                          color: p.category[index]['isSelected']
                                               ? Colors.white
                                               : Colors.black,
                                         ),
                                       ),
-                                      selected:category[index]['isSelected'],
+                                      selected:p.category[index]['isSelected'],
                                       onSelected: (value) {
-                                        setState(() {
-                                          category[index]['isSelected'] = value;
-                                          title=category[index]['title'];
-                                          print(title);
-                                        });
+                                         p.chip(index, value);
+                                         print(p.title);
                                       },
                                     ),
                                   ],
@@ -354,7 +342,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height:80),
                       CustomElevatedButton(
                         backgroundColor: Color(0xFF84C5A5),
                         width: 30,
@@ -368,7 +356,7 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
                               p.datecontroller.text.trim(),
                               p.startTimeController.text.trim(),
                               p.endTimeController.text.trim(),
-                              p.categorycontroller.text.trim(),
+                              p.title!,
                               context,
                             );
                             p.controllerclear();
@@ -440,21 +428,21 @@ class _AddtaskScreenState extends State<AddtaskScreen> {
   //   );
   // }
 
-  Widget _timeField(String title, String value) {
-    return Container(
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Color(0xFFEAFBF0),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title),
-          SizedBox(height: 15),
-          Text(value, style: TextStyle(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
+  // Widget _timeField(String title, String value) {
+  //   return Container(
+  //     padding: EdgeInsets.all(15),
+  //     decoration: BoxDecoration(
+  //       color: Color(0xFFEAFBF0),
+  //       borderRadius: BorderRadius.circular(15),
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(title),
+  //         SizedBox(height: 15),
+  //         Text(value, style: TextStyle(fontWeight: FontWeight.bold)),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

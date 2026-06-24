@@ -20,8 +20,8 @@ class _TaskupdateScreenState extends State<TaskupdateScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed:(){
-          Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back_ios),color:Colors.black),
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+        }, icon: Icon(Icons.arrow_back_ios),color:CustomColors.appbararrowicon(context)),
         title: Text('My Tasks'),
       ),
       body: Consumer<TaskProvider>(

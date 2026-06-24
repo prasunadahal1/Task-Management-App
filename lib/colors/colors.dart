@@ -6,6 +6,7 @@ class CustomColors{
   static bool isDark (BuildContext context)=>Theme.of(context).brightness==Brightness.dark;
   static Color  backgroundColor(BuildContext context)=>isDark(context)? const Color(0xFF303030): const Color(0xFFECFCF3);
   static Color appbar(BuildContext context)=>isDark(context)? const Color(0xFF303030):Color(0xFFECFCF3);
+  static Color appbararrowicon(BuildContext context)=>isDark(context)?const Color(0xFFECFCF3):Color(0xFF000000);
 
   static Color  addtaskprimarygreen(BuildContext context)=>isDark(context)? const Color(0xFF303030): const Color(0xFF84C5A5);
   static Color  addtaskcategory(BuildContext context)=>isDark(context)? const Color(0xFF3C3C3C): Colors.white;
