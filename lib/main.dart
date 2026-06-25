@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_app/providers/task_providers.dart';
-import 'package:task_app/providers/theme_provider.dart';
+import 'package:task_app/providers/session_management.dart';
 import 'package:task_app/resources/main_screen.dart';
 import 'package:task_app/screens/splash_screen.dart';
 

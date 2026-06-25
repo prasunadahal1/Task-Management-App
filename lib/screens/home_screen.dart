@@ -11,7 +11,7 @@ import 'package:task_app/screens/profile_screen.dart';
 import 'package:task_app/screens/taskupdate_screen.dart';
 
 import '../providers/task_providers.dart';
-import '../providers/theme_provider.dart';
+import '../providers/session_management.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
