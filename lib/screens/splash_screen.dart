@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_app/colors/colors.dart';
 import 'package:task_app/resources/main_screen.dart';
 import 'package:task_app/resources/custom.dart';
+import 'package:task_app/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -101,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (_) {
-                          return MainScreen();
+                          return LoginScreen();
                         },
                       ),
                     );
