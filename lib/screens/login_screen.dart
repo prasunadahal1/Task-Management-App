@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_app/resources/main_screen.dart';
 
+import '../providers/session_management.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -10,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late final SessionManagement sessionProvider = Provider.of<SessionManagement>(context,listen: false);
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -19,7 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,10 +74,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    final session=SessionManagement.instance;
+                    session.setSession(nameController.text,passwordController.text);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
+                        builder: (context) => MainScreen(),
                       ),
                     );
                   },
