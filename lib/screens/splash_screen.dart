@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_app/colors/colors.dart';
+import 'package:task_app/providers/session_management.dart';
 import 'package:task_app/resources/main_screen.dart';
 import 'package:task_app/resources/custom.dart';
+import 'package:task_app/screens/home_screen.dart';
 import 'package:task_app/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,6 +17,22 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
+  @override
+  // void initState() {
+  //   final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
+  //   super.initState();
+  //   final session=SessionManagement.instance;
+  //   session.loadSession().then((response){
+  //     if(session.userName==null){
+  //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (rout)=>false));
+  //     }
+  //     else{
+  //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> HomeScreen()), (rout)=>false));
+  //     }
+  //   });
+  // }
+
   final PageController _controller = PageController();
   int currentPage = 0;
   @override
@@ -98,6 +119,15 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 InkWell(
                   onTap: () {
+                    final session=SessionManagement.instance;
+                    session.loadSession().then((response){
+                      if(session.userName==null){
+                        Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (rout)=>false));
+                      }
+                      else{
+                        Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MainScreen()), (rout)=>false));
+                      }
+                    });
                     Navigator.push(
                       context,
                       MaterialPageRoute(

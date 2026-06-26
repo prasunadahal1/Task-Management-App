@@ -3,6 +3,13 @@ import 'package:http/http.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SessionManagement extends ChangeNotifier{
+
+  // TextEditingController _namecontroller=TextEditingController();
+  // TextEditingController get namecontroller=>_namecontroller;
+  //
+  // TextEditingController _passwordcontroller=TextEditingController();
+  // TextEditingController get passwordcontroller=>_passwordcontroller;
+
   static final SessionManagement _instance=SessionManagement();
   static SessionManagement get instance => _instance;
 
@@ -10,12 +17,13 @@ class SessionManagement extends ChangeNotifier{
   String? password;
 
   void setSession(String userName,String password)async{
-    this.userName=userName;
-    this.password=password;
+    userName=userName;
+    password=password;
 
      const storage =FlutterSecureStorage();
      await storage.write(key: 'userName', value: userName);
      await storage.write(key: 'password', value: password);
+     notifyListeners();
   }
   Future<void> loadSession()async{
     const storage=FlutterSecureStorage();
@@ -25,10 +33,17 @@ class SessionManagement extends ChangeNotifier{
     ]);
     userName=response[0];
     password=response[1];
-
+    notifyListeners();
   }
-  void clearSession(){
-    
+  void clearSession()async{
+    userName=null;
+    password=null;
+    const storage=FlutterSecureStorage();
+    await Future.wait([
+      storage.delete(key: 'userName'),
+      storage.delete(key: 'password'),
+    ]);
+    notifyListeners();
   }
 
 }
