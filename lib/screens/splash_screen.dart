@@ -19,19 +19,19 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   late final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
   @override
-  // void initState() {
-  //   final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
-  //   super.initState();
-  //   final session=SessionManagement.instance;
-  //   session.loadSession().then((response){
-  //     if(session.userName==null){
-  //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (rout)=>false));
-  //     }
-  //     else{
-  //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> HomeScreen()), (rout)=>false));
-  //     }
-  //   });
-  // }
+  void initState() {
+    final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
+    super.initState();
+    final session=SessionManagement.instance;
+    session.loadSession().then((response){
+      if(session.accessToken==null){
+        // Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> SplashScreen()), (rout)=>false));
+      }
+      else{
+        Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> HomeScreen()), (rout)=>false));
+      }
+    });
+  }
 
   final PageController _controller = PageController();
   int currentPage = 0;
@@ -41,8 +41,6 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor:CustomColors.backgroundColor(context),
       body: Container(
         child: Column(
-          // mainAxisAlignment:.center,
-          // crossAxisAlignment: .center,
           spacing: 5,
           children: [
             Container(
@@ -119,15 +117,15 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    final session=SessionManagement.instance;
-                    session.loadSession().then((response){
-                      if(session.userName==null){
-                        Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (rout)=>false));
-                      }
-                      else{
-                        Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MainScreen()), (rout)=>false));
-                      }
-                    });
+                  //   final session=SessionManagement.instance;
+                  //   session.loadSession().then((response){
+                  //     if(session.userName==null){
+                  //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (rout)=>false));
+                  //     }
+                  //     else{
+                  //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MainScreen()), (rout)=>false));
+                  //     }
+                  //   });
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -136,7 +134,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         },
                       ),
                     );
-                  },
+                   },
                   child: Container(
                     height: 50,
                     width: 300,
