@@ -286,6 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         }, widget:Text('cancel')),
                                         CustomElevatedButton(
                                           onPressed: () async {
+                                            p.editTask(index);
                                             p.editData(
                                                 p.filteredLists[index]["title"],
                                                 p.filteredLists[index]["description"],
@@ -297,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             );
                                                 p.clearControllers();
                                                 Navigator.pop(context);
-                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                ScaffoldMessenger.of(context).showSnackBar(
                                                 SnackBar(
                                                     backgroundColor: Colors.white,
                                                     behavior: SnackBarBehavior.floating,

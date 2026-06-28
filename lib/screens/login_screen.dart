@@ -14,21 +14,20 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late final SessionManagement sessionProvider = Provider.of<SessionManagement>(context,listen: false);
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    nameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
+
+  // @override
+  // void dispose() {
+  //   sessionProvider.namecontroller.dispose();
+  //   sessionProvider.passwordcontroller.dispose();
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -43,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 30),
 
               TextFormField(
-                controller: nameController,
+                controller: sessionProvider.namecontroller,
                 decoration: InputDecoration(
                   labelText: 'Name',
                   hintText: 'Enter your name',
@@ -56,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 20),
 
               TextFormField(
-                controller: passwordController,
+                controller: sessionProvider.passwordcontroller,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -74,14 +73,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    final session=SessionManagement.instance;
-                    session.setSession(nameController.text,passwordController.text);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainScreen(),
-                      ),
-                    );
+                    sessionProvider.postData(sessionProvider.namecontroller.text, sessionProvider.passwordcontroller.text,context);
+                    // final session=SessionManagement.instance;
+                    // session.setSession(sessionProvider.namecontroller.text,sessionProvider.passwordcontroller.text);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => MainScreen(),
+                    //   ),
+                    // );
                   },
                   child: Text('Login'),
                 ),

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:task_app/providers/task_providers.dart';
+import 'package:task_app/screens/splash_screen.dart';
+
+import '../providers/session_management.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,9 +101,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: ListTile(
             leading: Icon(Icons.settings_outlined),
-            title: Text("Settings"),
+            title: Text("Logout"),
             trailing: Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {},
+            onTap: () {
+              sessionProvider.clearSession();
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>SplashScreen()), (route)=>false);
+            },
             ),
             ),
 
