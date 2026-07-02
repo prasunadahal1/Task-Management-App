@@ -17,18 +17,54 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
+  late final SessionManagement sessionProvider = Provider.of<SessionManagement>(
+    context,
+    listen: false,
+  );
+  // @override
+  // void initState() {
+  //   final SessionManagement sessionProvider = Provider.of<SessionManagement>(
+  //     context,
+  //     listen: false,
+  //   );
+  //   super.initState();
+  //
+  //   // final session = SessionManagement.instance;
+  //   // final refresh =SessionManagement.instance;
+  //   sessionProvider.loadSession().then((response) {
+  //     if (sessionProvider.refreshToken != null) {
+  //       sessionProvider.refreshSession(context);
+  //     } else {
+  //       print("No refresh token found");
+  //     }
+  //     // if(session.accessToken==null){
+  //     //   // Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> SplashScreen()), (rout)=>false));
+  //     // }
+  //     // else{
+  //     //   Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> HomeScreen()), (rout)=>false));
+  //     // }
+  //   });
+  // }
   @override
   void initState() {
-    final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
     super.initState();
-    final session=SessionManagement.instance;
-    session.loadSession().then((response){
-      if(session.accessToken==null){
-        // Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> SplashScreen()), (rout)=>false));
-      }
-      else{
-        Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> HomeScreen()), (rout)=>false));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final session = Provider.of<SessionManagement>(
+        context,
+        listen: false,
+      );
+print('hello');
+      await session.loadSession();
+
+      print(session.refreshToken);
+print('hi');
+      if (session.refreshToken != null) {
+        print('hi2');
+        await session.refreshSession(context);
+        print('hi3');
+      } else {
+        print("Refresh token not found");
       }
     });
   }
@@ -38,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:CustomColors.backgroundColor(context),
+      backgroundColor: CustomColors.backgroundColor(context),
       body: Container(
         child: Column(
           spacing: 5,
@@ -117,15 +153,15 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                  //   final session=SessionManagement.instance;
-                  //   session.loadSession().then((response){
-                  //     if(session.userName==null){
-                  //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (rout)=>false));
-                  //     }
-                  //     else{
-                  //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MainScreen()), (rout)=>false));
-                  //     }
-                  //   });
+                    //   final session=SessionManagement.instance;
+                    //   session.loadSession().then((response){
+                    //     if(session.userName==null){
+                    //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (rout)=>false));
+                    //     }
+                    //     else{
+                    //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MainScreen()), (rout)=>false));
+                    //     }
+                    //   });
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -134,7 +170,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         },
                       ),
                     );
-                   },
+                  },
                   child: Container(
                     height: 50,
                     width: 300,
@@ -189,7 +225,7 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20),
         padding: EdgeInsets.all(2),
-        decoration: BoxDecoration(color:CustomColors.backgroundColor(context)),
+        decoration: BoxDecoration(color: CustomColors.backgroundColor(context)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -263,7 +299,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 40),
       padding: EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(color:CustomColors.backgroundColor(context)),
+      decoration: BoxDecoration(color: CustomColors.backgroundColor(context)),
       child: Column(
         children: [
           Icon(Icons.trending_up_rounded, size: 35, color: Color(0xFF84C5A5)),
@@ -274,7 +310,6 @@ class _SplashScreenState extends State<SplashScreen> {
             style: TextStyle(
               fontSize: 16,
               color: CustomColors.greytext(context),
-              
             ),
           ),
           SizedBox(height: 3),
