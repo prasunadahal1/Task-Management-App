@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context)=> TaskProvider(),),
-         ChangeNotifierProvider(create: (context)=> SessionManagement()),
+         ChangeNotifierProvider(create: (_) => SessionManagement.instance),
       ],
       child:Builder(builder: (BuildContext context){
         return Consumer<TaskProvider>(
