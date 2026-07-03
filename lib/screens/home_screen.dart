@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:date_picker_timeline/extra/color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,10 +23,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   void initState() {
     final TaskProvider taskProvider= Provider.of<TaskProvider>(context,listen: false);
+   
     super.initState();
     taskProvider.getData();
     taskProvider.data;
@@ -76,8 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width:15),
           Padding(
             padding: EdgeInsetsGeometry.only(right: 15),
-            child: Consumer<TaskProvider>(
-              builder: (context,p,_){
+            child: Consumer<SessionManagement>(
+              builder: (context,sessionProvider,_){
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -86,7 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                   child: CircleAvatar(
-                    backgroundImage: p.image!=null? MemoryImage(p.image!):NetworkImage('https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80'),
+                    backgroundImage:sessionProvider.img!=null? MemoryImage(sessionProvider.img!): sessionProvider.image !=null ?NetworkImage(sessionProvider.image!):NetworkImage('https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80'),
+                    // backgroundImage:sessionProvider.image!=null? MemoryImage(sessionProvider.image! as Uint8List):NetworkImage('https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80'),
                     backgroundColor: Color(0xFF84C5A5),
                     radius: 20,
                   ),
