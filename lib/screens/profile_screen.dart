@@ -28,7 +28,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Stack(
               children: [
                 CircleAvatar(
-                  radius:65,backgroundImage:p.image!=null? MemoryImage(p.image!):NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP2PkyoMJU2a4Ye6rIxeKgVFMonYPnIwIGLJMXJ6lrVrhJzmxd3IrBu22N&s=10'),
+                  radius:65,
+                  backgroundImage: p.image != null
+                      ? NetworkImage(p.image as String)
+                      : null,
+                  // backgroundImage:p.image!=null? MemoryImage(p.image!):NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP2PkyoMJU2a4Ye6rIxeKgVFMonYPnIwIGLJMXJ6lrVrhJzmxd3IrBu22N&s=10'),
                 ),
                 Positioned(child:IconButton(
                   onPressed: (){
@@ -53,17 +57,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               //   ),
               // ),
             SizedBox(height:5),
-            Text(
-            "Prasuna Dahal",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+            // Text(
+            //   "${sessionProvider.user["firstName"]} ${sessionProvider.user["lastName"]}",
+            // style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            // ),
 
             SizedBox(height:3),
 
-            Text(
-            "prasunadahal@gmail.com",
-            style: TextStyle(color: Colors.grey.shade600),
-            ),
+            // Text(
+            //   sessionProvider.user["email"],
+            // style: TextStyle(color: Colors.grey.shade600),
+            // ),
 
             SizedBox(height: 30),
 
