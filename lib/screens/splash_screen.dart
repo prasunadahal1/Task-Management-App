@@ -54,11 +54,11 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         listen: false,
       );
-print('hello');
+      print('hello');
       await session.loadSession();
 
       print(session.refreshToken);
-print('hi');
+      print('hi');
       if (session.refreshToken != null) {
         print('hi2');
         await session.refreshSession(context);
