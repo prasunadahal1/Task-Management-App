@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:typed_data';
 // import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:task_app/resources/main_screen.dart';
 
 class SessionManagement extends ChangeNotifier {
@@ -33,6 +35,12 @@ class SessionManagement extends ChangeNotifier {
 
   Map<String, dynamic> get data => _data;
 
+  String? _image;
+  String? get image => _image;
+
+  Uint8List? _img;
+  Uint8List? get img => _img;
+
   Future<void> postData(String username,
       String password,
       BuildContext context,) async {
@@ -48,6 +56,12 @@ class SessionManagement extends ChangeNotifier {
       final data = jsonDecode(response.body);
       _accessToken = data['accessToken'];
       _refreshToken = data['refreshToken'];
+      _image=data['image'];
+      // await _storage.write(
+      //   key: "image",
+      //   value: _image,
+      // );
+      _data=data;
       await setSession(_accessToken!);
       await setRefreshSession(_refreshToken!);
       if (context.mounted) {
@@ -144,9 +158,15 @@ class SessionManagement extends ChangeNotifier {
     final response = await Future.wait([
       _storage.read(key: 'accessToken'),
       _storage.read(key: 'refreshToken'),
+      // _storage.read(key: 'image'),
+      // _storage.read(key: 'galleryImage'),
     ]);
     _accessToken = response[0];
     _refreshToken = response[1];
+    // _image = response[2];
+    // if (response[3] != null) {
+    //   _img = base64Decode(response[3]!);
+    // }
 
     notifyListeners();
   }
@@ -154,35 +174,77 @@ class SessionManagement extends ChangeNotifier {
   Future<void> clearSession() async {
     _accessToken = null;
     _refreshToken = null;
+    _img=null;
+    _image=null;
     await Future.wait([
       _storage.delete(key: 'accessToken'),
       _storage.delete(key: 'refreshToken'),
+      // _storage.delete(key: 'image'),
+      // _storage.delete(key: 'galleryImage'),
     ]);
     notifyListeners();
   }
+  Future<dynamic> pickImage(ImageSource source) async{
+    final ImagePicker _imagepicker =ImagePicker();
+    XFile? _file= await _imagepicker.pickImage(source: source);
 
-  Future<void> saveUserData(Map<String, dynamic> user) async {
-    const storage = FlutterSecureStorage();
-
-    await storage.write(
-      key: "user",
-      value: jsonEncode(user),
-    );
-  }
-
-  Map<String, dynamic> user = {};
-
-  Future<void> loadUserData() async {
-    const storage = FlutterSecureStorage();
-
-    final value = await storage.read(key: "user");
-
-    if (value != null) {
-      user = jsonDecode(value);
+    if (_file != null) {
+      return await _file.readAsBytes();
     }
-
     notifyListeners();
   }
+
+  Future<void> selectImage() async {
+    final Uint8List? pickedImage = await pickImage(ImageSource.gallery);
+    if (pickedImage != null) {
+      _img = pickedImage;
+
+      // final String base64Image = base64Encode(pickedImage);
+      //
+      // await _storage.write(
+      //   key: "galleryImage",
+      //   value: base64Image,
+      // );
+      notifyListeners();
+    }
+  }
+  Future<void> getCurrentUser()async{
+    final response=await get(Uri.parse("https://dummyjson.com/auth/me"),
+      headers: {
+      'Authorization':'Bearer $_accessToken'},
+    );
+    if(response.statusCode==200){
+      final data =jsonDecode(response.body);
+      _data=data;
+      _image = data["image"];
+      notifyListeners();
+    }else{
+      await clearSession();
+    }
+  }
+
+  // Future<void> saveUserData(Map<String, dynamic> user) async {
+  //   const storage = FlutterSecureStorage();
+  //
+  //   await storage.write(
+  //     key: "user",
+  //     value: jsonEncode(user),
+  //   );
+  // }
+  //
+  // Map<String, dynamic> user = {};
+  //
+  // Future<void> loadUserData() async {
+  //   const storage = FlutterSecureStorage();
+  //
+  //   final value = await storage.read(key: "user");
+  //
+  //   if (value != null) {
+  //     user = jsonDecode(value);
+  //   }
+  //
+  //   notifyListeners();
+  // }
 }
 
 

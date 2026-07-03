@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -14,116 +16,125 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final SessionManagement sessionProvider= Provider.of<SessionManagement>(context,listen: false);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Profile"), centerTitle: true),
       body: SingleChildScrollView(
-        child: Consumer<TaskProvider>(
-          builder: (context,p,_){
+        child: Consumer<SessionManagement>(
+          builder: (context, p, _) {
             return Column(
-            children: [
-            SizedBox(height: 30),
-            Stack(
               children: [
-                CircleAvatar(
-                  radius:65,
-                  backgroundImage: p.image != null
-                      ? NetworkImage(p.image as String)
-                      : null,
-                  // backgroundImage:p.image!=null? MemoryImage(p.image!):NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP2PkyoMJU2a4Ye6rIxeKgVFMonYPnIwIGLJMXJ6lrVrhJzmxd3IrBu22N&s=10'),
+                SizedBox(height: 30),
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 65,
+                      // backgroundImage: NetworkImage(sessionProvider.image!),
+                      backgroundImage: p.img != null
+                          ? MemoryImage(p.img!)
+                          : p.image != null
+                          ? NetworkImage(p.image!)
+                          : NetworkImage(
+                              'https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80',
+                            ),
+                    ),
+                    Positioned(
+                      child: IconButton(
+                        onPressed: () {
+                          p.selectImage();
+                        },
+                        icon: Icon(Icons.add_a_photo, size: 25),
+                      ),
+                      bottom: -9,
+                      left: 70,
+                    ),
+                  ],
                 ),
-                Positioned(child:IconButton(
-                  onPressed: (){
-                    p.selectImage();
-                  }, icon:Icon(Icons.add_a_photo,size:25),
+                // TextButton(
+                //   onPressed: () {
+                //     p.selectImage();
+                //   },
+                //   child:Row(
+                //     mainAxisAlignment: .center,
+                //     children: [
+                //       Text("Add Photo",style: TextStyle(color: Colors.grey.shade600),),
+                //       Icon(Icons.add_a_photo_outlined,color: Colors.grey.shade600,)
+                //     ],
+                //   ),
+                // ),
+                SizedBox(height: 5),
+                Text(
+                  "${p.data["firstName"]?? ""} ${p.data["lastName"]?? ""}",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                  bottom:-9,
-                  left: 70,
+
+                SizedBox(height: 3),
+
+                Text(
+                  p.data["email"]?? "",
+                  style: TextStyle(color: Colors.grey.shade600),
                 ),
+
+                SizedBox(height: 30),
+
+                Card(
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    leading: Icon(Icons.person_outline),
+                    title: Text("Edit Profile"),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: () {},
+                  ),
+                ),
+
+                Card(
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    leading: Icon(Icons.notifications_outlined),
+                    title: Text("Notifications"),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: () {},
+                  ),
+                ),
+
+                Card(
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    leading: Icon(Icons.lock_outline),
+                    title: Text("Privacy"),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: () {},
+                  ),
+                ),
+
+                Card(
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    leading: Icon(Icons.settings_outlined),
+                    title: Text("Logout"),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: () {
+                      p.clearSession();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => SplashScreen()),
+                        (route) => false,
+                      );
+                    },
+                  ),
+                ),
+
+                SizedBox(height: 30),
+
+                // ElevatedButton.icon(
+                //   onPressed: () {
+                //     Navigator.pop(context);
+                //   },
+                //   icon:  Icon(Icons.logout),
+                //   label:  Text("Logout"),
+                // ),
               ],
-            ),
-              // TextButton(
-              //   onPressed: () {
-              //     p.selectImage();
-              //   },
-              //   child:Row(
-              //     mainAxisAlignment: .center,
-              //     children: [
-              //       Text("Add Photo",style: TextStyle(color: Colors.grey.shade600),),
-              //       Icon(Icons.add_a_photo_outlined,color: Colors.grey.shade600,)
-              //     ],
-              //   ),
-              // ),
-            SizedBox(height:5),
-            // Text(
-            //   "${sessionProvider.user["firstName"]} ${sessionProvider.user["lastName"]}",
-            // style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            // ),
-
-            SizedBox(height:3),
-
-            // Text(
-            //   sessionProvider.user["email"],
-            // style: TextStyle(color: Colors.grey.shade600),
-            // ),
-
-            SizedBox(height: 30),
-
-            Card(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ListTile(
-            leading: Icon(Icons.person_outline),
-            title: Text("Edit Profile"),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {},
-            ),
-            ),
-
-            Card(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ListTile(
-            leading: Icon(Icons.notifications_outlined),
-            title: Text("Notifications"),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {},
-            ),
-            ),
-
-            Card(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ListTile(
-            leading: Icon(Icons.lock_outline),
-            title: Text("Privacy"),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {},
-            ),
-            ),
-
-            Card(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ListTile(
-            leading: Icon(Icons.settings_outlined),
-            title: Text("Logout"),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              sessionProvider.clearSession();
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>SplashScreen()), (route)=>false);
-            },
-            ),
-            ),
-
-            SizedBox(height: 30),
-
-            // ElevatedButton.icon(
-            //   onPressed: () {
-            //     Navigator.pop(context);
-            //   },
-            //   icon:  Icon(Icons.logout),
-            //   label:  Text("Logout"),
-            // ),
-            ],
             );
           },
         ),
@@ -131,4 +142,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-

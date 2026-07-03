@@ -16,12 +16,6 @@ class TaskProvider extends ChangeNotifier {
   List<dynamic> _data =[];
   List<dynamic> get data=> _data;
 
-  Uint8List? _image;
-  Uint8List? get image => _image;
-
-  Uint8List? _img;
-  Uint8List? get img => _img;
-
   bool _isDarkMode = false;
   bool get isDarkMode => _isDarkMode;
   void toggleTheme() {
@@ -305,23 +299,7 @@ Future<void> deleteData(String id)async{
     notifyListeners();
   }
 
-Future<dynamic> pickImage(ImageSource source) async{
-    final ImagePicker _imagepicker =ImagePicker();
-    XFile? _file= await _imagepicker.pickImage(source: source);
 
-    if (_file != null) {
-        return await _file.readAsBytes();
-    }
-    notifyListeners();
-}
-
- Future<dynamic> selectImage()async{
-   _image = await pickImage(ImageSource.gallery);
-  if (_img!= null){
-    _image=_img!;
-  }
-  notifyListeners();
-}
 
   void initEditTask({
     required String title,

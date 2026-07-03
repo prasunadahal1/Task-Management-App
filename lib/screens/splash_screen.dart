@@ -48,23 +48,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final session = Provider.of<SessionManagement>(
         context,
         listen: false,
       );
-      print('hello');
       await session.loadSession();
-
-      print(session.refreshToken);
-      print('hi');
       if (session.refreshToken != null) {
-        print('hi2');
-        await session.refreshSession(context);
-        print('hi3');
+        await session.getCurrentUser();
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>MainScreen()), (route)=>false);
       } else {
-        print("Refresh token not found");
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>LoginScreen()), (route)=>false);
       }
     });
   }
