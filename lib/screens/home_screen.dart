@@ -23,15 +23,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late SessionManagement sessionManagement = Provider.of<SessionManagement>(
+    context,
+    listen: false,
+  );
   @override
   void initState() {
-    final TaskProvider taskProvider= Provider.of<TaskProvider>(context,listen: false);
-   
+    final TaskProvider taskProvider = Provider.of<TaskProvider>(
+      context,
+      listen: false,
+    );
+
     super.initState();
     taskProvider.getData();
     taskProvider.data;
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SizedBox(height: 13),
             Text(
-              'Hi, User!',
+              '${sessionManagement.data["firstName"] ?? ""} ${sessionManagement.data["lastName"] ?? ""}',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: CustomColors.blacktext(context),
@@ -75,11 +82,11 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
-          SizedBox(width:15),
+          SizedBox(width: 15),
           Padding(
             padding: EdgeInsetsGeometry.only(right: 15),
             child: Consumer<SessionManagement>(
-              builder: (context,sessionProvider,_){
+              builder: (context, sessionProvider, _) {
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -88,7 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                   child: CircleAvatar(
-                    backgroundImage:sessionProvider.img!=null? MemoryImage(sessionProvider.img!): sessionProvider.image !=null ?NetworkImage(sessionProvider.image!):NetworkImage('https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80'),
+                    backgroundImage: sessionProvider.img != null
+                        ? MemoryImage(sessionProvider.img!)
+                        : sessionProvider.image != null
+                        ? NetworkImage(sessionProvider.image!)
+                        : NetworkImage(
+                            'https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80',
+                          ),
                     // backgroundImage:sessionProvider.image!=null? MemoryImage(sessionProvider.image! as Uint8List):NetworkImage('https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80'),
                     backgroundColor: Color(0xFF84C5A5),
                     radius: 20,
@@ -102,27 +115,27 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Consumer<TaskProvider>(
         builder: (context, p, _) {
           return Container(
-            margin: EdgeInsets.only(top:30),
+            margin: EdgeInsets.only(top: 30),
             child: Column(
               children: [
                 Container(
-            margin: EdgeInsets.symmetric(horizontal: 12),
-            padding: EdgeInsets.symmetric(vertical:5),
-            decoration: BoxDecoration(
-              color: CustomColors.card(context),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: CustomColors.cardborder(context),
-                width: 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
-                  blurRadius:8,
-                  offset: Offset(0,2),
-                ),
-              ],
-            ),
+                  margin: EdgeInsets.symmetric(horizontal: 12),
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  decoration: BoxDecoration(
+                    color: CustomColors.card(context),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: CustomColors.cardborder(context),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.25),
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
                   child: DatePicker(
                     daysCount: 30,
                     DateTime.now(),
@@ -130,15 +143,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 80,
                     initialSelectedDate: DateTime.now(),
                     selectionColor: Color(0xFF84C5A5),
-                    selectedTextColor:Colors.black,
+                    selectedTextColor: Colors.black,
                     deactivatedColor: Color(0xFFB0B0B0),
                   ),
                 ),
                 SizedBox(height: 20),
 
                 Container(
-                  width:MediaQuery.of(context).size.width*0.9,
-                  height:MediaQuery.of(context).size.height*0.08,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: MediaQuery.of(context).size.height * 0.08,
                   child: TextFormField(
                     onChanged: (value) {
                       p.searchFilter(value);
@@ -149,13 +162,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       fillColor: Colors.black,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(40),
-                        borderSide: BorderSide(color: Color(0xFF84C5A5),width: 1)
+                        borderSide: BorderSide(
+                          color: Color(0xFF84C5A5),
+                          width: 1,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(40),
                         borderSide: BorderSide(
                           color: Color(0xFF84C5A5),
-                          width:1.5,
+                          width: 1.5,
                         ),
                       ),
                     ),
@@ -171,12 +187,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             SlidableAction(
                               onPressed: (_) {
-                                p.initEditTask(title: p.filteredLists[index]['title']??'',
-                                    desc:p.filteredLists[index]['description']??'',
-                                    date: p.filteredLists[index]['date']??'',
-                                    startTime: p.filteredLists[index]['startTime']??'',
-                                    endTime: p.filteredLists[index]['endTime']??'',
-                                    category:p.filteredLists[index]['category']??'');
+                                p.initEditTask(
+                                  title: p.filteredLists[index]['title'] ?? '',
+                                  desc:
+                                      p.filteredLists[index]['description'] ??
+                                      '',
+                                  date: p.filteredLists[index]['date'] ?? '',
+                                  startTime:
+                                      p.filteredLists[index]['startTime'] ?? '',
+                                  endTime:
+                                      p.filteredLists[index]['endTime'] ?? '',
+                                  category:
+                                      p.filteredLists[index]['category'] ?? '',
+                                );
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -283,97 +306,192 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       actions: [
-                                        CustomElevatedButton(onPressed: ()async {
-                                          p.clearControllers();
-                                          Navigator.pop(context);
-                                        }, widget:Text('cancel')),
+                                        CustomElevatedButton(
+                                          onPressed: () async {
+                                            p.clearControllers();
+                                            Navigator.pop(context);
+                                          },
+                                          widget: Text('cancel'),
+                                        ),
                                         CustomElevatedButton(
                                           onPressed: () async {
                                             p.editTask(index);
                                             p.editData(
-                                                p.filteredLists[index]["title"],
-                                                p.filteredLists[index]["description"],
-                                                p.filteredLists[index]["date"].toString(),
-                                                p.filteredLists[index]["startTime"].toString(),
-                                                p.filteredLists[index]["endTime"].toString(),
-                                                p.filteredLists[index]["category"],
-                                                p.filteredLists[index]["id"].toString(),
+                                              p.filteredLists[index]["title"],
+                                              p.filteredLists[index]["description"],
+                                              p.filteredLists[index]["date"]
+                                                  .toString(),
+                                              p.filteredLists[index]["startTime"]
+                                                  .toString(),
+                                              p.filteredLists[index]["endTime"]
+                                                  .toString(),
+                                              p.filteredLists[index]["category"],
+                                              p.filteredLists[index]["id"]
+                                                  .toString(),
                                             );
-                                                p.clearControllers();
-                                                Navigator.pop(context);
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(
-                                                    backgroundColor: Colors.white,
-                                                    behavior: SnackBarBehavior.floating,
-                                                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 180,left: 16,right: 16),
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(15)),
-                                                    content: Row(
-                                                      children: [
-                                                        Icon(Icons.check_circle, color: Color(0xFF84C5A5)),
-                                                        SizedBox(width: 10),
-                                                        Text('Edited Task Sucessfully',style: TextStyle(color:Colors.black),),
-                                                      ],
-                                                    )));
+                                            p.clearControllers();
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: Colors.white,
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                margin: EdgeInsets.only(
+                                                  bottom:
+                                                      MediaQuery.of(
+                                                        context,
+                                                      ).size.height -
+                                                      180,
+                                                  left: 16,
+                                                  right: 16,
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadiusGeometry.circular(
+                                                        15,
+                                                      ),
+                                                ),
+                                                content: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.check_circle,
+                                                      color: Color(0xFF84C5A5),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    Text(
+                                                      'Edited Task Successfully',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
                                           },
                                           widget: Text('Edit'),
                                         ),
-
                                       ],
                                     );
                                   },
                                 );
                               },
-                              backgroundColor: CustomColors.editdeletepanel(context),
+                              backgroundColor: CustomColors.editdeletepanel(
+                                context,
+                              ),
                               icon: Icons.edit,
                               foregroundColor: Color(0xFF84C5A5),
                               label: 'Edit',
                             ),
                             SlidableAction(
                               onPressed: (_) {
-                               showDialog(context: context, builder:(context){
-                                 return AlertDialog(
-                                   shape: RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.circular(20),
-                                   ),
-                                   title: Text('Are you sure you want to delete?',textAlign:TextAlign.center,style: TextStyle(fontSize:20),),
-                                   actionsAlignment: MainAxisAlignment.center,
-                                   actions: [
-                                     OutlinedButton(
-                                       onPressed: () {
-                                   Navigator.pop(context);
-                                 }, child: Text('No',style: TextStyle(color: Color(0xFF84C5A5)),),style:OutlinedButton.styleFrom(side: BorderSide(color: Color(0xFF84C5A5))),),
-                                     OutlinedButton(
-                                       onPressed: () {
-                                         print(p.filteredLists[index]["id"]);
-                                         p.deleteData(p.filteredLists[index]["id"].toString());
-                                         // p.deleteTask(index);
-                                         Navigator.pop(context);
-                                         ScaffoldMessenger.of(context).showSnackBar(
-                                             SnackBar(
-                                                 backgroundColor: Colors.white,
-                                                 behavior: SnackBarBehavior.floating,
-                                                 margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 180,left: 16,right: 16),
-                                                 shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(15)),
-                                                 content: Row(
-                                                   children: [
-                                                     Icon(Icons.check_circle, color: Color(0xFF84C5A5)),
-                                                     SizedBox(width: 10),
-                                                     Text('Deleted Task Sucessfully',style: TextStyle(color:Colors.black),),
-                                                   ],
-                                                 )));
-                                       }, child: Text('Yes',style: TextStyle(color: Colors.red),),style:OutlinedButton.styleFrom(side: BorderSide(color: Color(0xFF84C5A5)))),
-                                     // TextButton(onPressed: (){
-                                     //   Navigator.pop(context);
-                                     // }, child:Text('No',style: TextStyle(color: Color(0xFF84C5A5)),)),
-                                     // TextButton(onPressed: (){
-                                     //   p.deleteTask(index);
-                                     //   Navigator.pop(context);
-                                     // }, child:Text('Yes',style: TextStyle(color: Colors.red),)),
-                                   ],
-                                 );
-                               });
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      title: Text(
+                                        'Are you sure you want to delete?',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      actionsAlignment:
+                                          MainAxisAlignment.center,
+                                      actions: [
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            'No',
+                                            style: TextStyle(
+                                              color: Color(0xFF84C5A5),
+                                            ),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                            side: BorderSide(
+                                              color: Color(0xFF84C5A5),
+                                            ),
+                                          ),
+                                        ),
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            print(p.filteredLists[index]["id"]);
+                                            p.deleteData(
+                                              p.filteredLists[index]["id"]
+                                                  .toString(),
+                                            );
+                                            // p.deleteTask(index);
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: Colors.white,
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                margin: EdgeInsets.only(
+                                                  bottom:
+                                                      MediaQuery.of(
+                                                        context,
+                                                      ).size.height -
+                                                      180,
+                                                  left: 16,
+                                                  right: 16,
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadiusGeometry.circular(
+                                                        15,
+                                                      ),
+                                                ),
+                                                content: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.check_circle,
+                                                      color: Color(0xFF84C5A5),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    Text(
+                                                      'Deleted Task Sucessfully',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            'Yes',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                            side: BorderSide(
+                                              color: Color(0xFF84C5A5),
+                                            ),
+                                          ),
+                                        ),
+                                        // TextButton(onPressed: (){
+                                        //   Navigator.pop(context);
+                                        // }, child:Text('No',style: TextStyle(color: Color(0xFF84C5A5)),)),
+                                        // TextButton(onPressed: (){
+                                        //   p.deleteTask(index);
+                                        //   Navigator.pop(context);
+                                        // }, child:Text('Yes',style: TextStyle(color: Colors.red),)),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
-                              backgroundColor: CustomColors.editdeletepanel(context),
+                              backgroundColor: CustomColors.editdeletepanel(
+                                context,
+                              ),
                               icon: Icons.delete,
                               foregroundColor: Colors.red,
                               label: 'Delete',
@@ -387,7 +505,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            border: Border.all(color: CustomColors.cardborder(context)),
+                            border: Border.all(
+                              color: CustomColors.cardborder(context),
+                            ),
                             color: CustomColors.card(context),
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
@@ -409,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: 60,
                                     decoration: BoxDecoration(
                                       color: Color(0xFF84C5A5),
-                                        borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Icon(
                                       Icons.task,
@@ -433,21 +553,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Text(
                                           p.filteredLists[index]['description'],
                                           style: TextStyle(
-                                            color: CustomColors.greytext(context),
+                                            color: CustomColors.greytext(
+                                              context,
+                                            ),
                                             fontSize: 13,
                                           ),
                                         ),
                                         Text(
                                           '${p.filteredLists[index]['startTime']}-${p.filteredLists[index]['endTime']}',
                                           style: TextStyle(
-                                            color: CustomColors.greytext(context),
+                                            color: CustomColors.greytext(
+                                              context,
+                                            ),
                                             fontSize: 13,
                                           ),
                                         ),
                                         Text(
                                           p.filteredLists[index]['category'],
                                           style: TextStyle(
-                                            color: CustomColors.greytext(context),
+                                            color: CustomColors.greytext(
+                                              context,
+                                            ),
                                             fontSize: 12,
                                           ),
                                         ),

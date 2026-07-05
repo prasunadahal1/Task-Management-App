@@ -183,25 +183,9 @@ class TaskProvider extends ChangeNotifier {
         'category':categorycontroller.text,
       }),
     );
-    // if(response.statusCode ==200 || response.statusCode ==201){
-    //   final dataIndex = _data.indexWhere((task) => task['id'].toString() == id);
-    //   if(dataIndex != -1){
-    //     _data[dataIndex] = {
-    //       ..._data[dataIndex],
-    //       'title': _controller.text,
-    //       'description': _descriptioncontroller.text,
-    //       'date': _datecontroller.text,
-    //       'startTime': _startTime ?? startTime,
-    //       'endTime': _endTime ?? endTime,
-    //       'category': _categorycontroller.text
-    //     };
-    //   }
-    //
-    // }
     _filteredLists = List<dynamic>.from(_data);
     notifyListeners();
     return response.statusCode==200|| response.statusCode==201;
-    print(response.statusCode);
 
   }
   // void searchFilter(String keyword) {
@@ -299,8 +283,6 @@ Future<void> deleteData(String id)async{
     notifyListeners();
   }
 
-
-
   void initEditTask({
     required String title,
     required String desc,
@@ -325,6 +307,7 @@ Future<void> deleteData(String id)async{
     _startTimeController.clear();
     _endTimeController.clear();
     _categorycontroller.clear();
+    notifyListeners();
   }
 }
 
