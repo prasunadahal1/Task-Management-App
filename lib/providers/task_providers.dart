@@ -96,37 +96,38 @@ class TaskProvider extends ChangeNotifier {
     print(title);
   }
 
-  Future<bool> addTask (
+  Future<bool> addTask(
     String title,
     String description,
     String date,
     String startTime,
     String endTime,
     String category,
-      context,
+    context,
   ) async {
-    filteredLists.add({
-      'title': title,
-      'description': description,
-      'date': date,
-      'startTime': startTime,
-      'endTime': endTime,
-      'category': category,
-    });
-    Response response=await post(Uri.parse('https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo'),
-      headers:{'content-type':'application/json'},
+    Response response = await post(
+      Uri.parse(
+        'https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo',
+      ),
+      headers: {'content-type': 'application/json'},
       body: jsonEncode({
-        'title':controller.text,
-        'description':descriptioncontroller.text,
-        'date':datecontroller.text,
-        'startTime':_startTime,
-        'endTime':_endTime,
-        'category':categorycontroller.text,
+        'title': title,
+        'description': description,
+        'date': date,
+        'startTime': startTime,
+        'endTime': endTime,
+        'category': category,
       }),
     );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final task = jsonDecode(response.body) as Map<String, dynamic>;
+      _data.add(task);
+      _filteredLists = List<dynamic>.from(_data);
+      notifyListeners();
+      return true;
+    }
     notifyListeners();
-    print(response.statusCode);
-    return response.statusCode==200|| response.statusCode==201;
+    return false;
   }
 
   void controllerclear(){
@@ -155,38 +156,78 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void editTask(int index)async {
-    filteredLists[index]['title'] = controller.value.text;
-    filteredLists[index]['description'] = descriptioncontroller.value.text;
-    filteredLists[index]['date'] = datecontroller.value.text;
-    filteredLists[index]['startTime'] = _startTime;
-    filteredLists[index]['endTime'] = _endTime;
-    filteredLists[index]['category'] = categorycontroller.value.text;
+  void editTask(int index) {
+    final startTime = startTimeController.text.isNotEmpty
+        ? startTimeController.text
+        : _startTime;
+    final endTime = endTimeController.text.isNotEmpty
+        ? endTimeController.text
+        : _endTime;
+    final updatedTask = {
+      ...Map<String, dynamic>.from(filteredLists[index] as Map),
+      'title': controller.text,
+      'description': descriptioncontroller.text,
+      'date': datecontroller.text,
+      'startTime': startTime,
+      'endTime': endTime,
+      'category': categorycontroller.text,
+    };
+    _filteredLists[index] = updatedTask;
+
+    final id = updatedTask['id'];
+    if (id != null) {
+      final dataIndex = _data.indexWhere((task) => task['id'] == id);
+      if (dataIndex != -1) {
+        _data[dataIndex] = Map<String, dynamic>.from(updatedTask);
+      }
+    }
     notifyListeners();
   }
-  Future<bool>editData(String title,
-      String description,
-      String date,
-      String startTime,
-      String endTime,
-      String category,
-      String id
-       )async{
-    Response response =await put(Uri.parse("https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo/$id"),
-      headers:{'content-type':'application/json'},
-      body: jsonEncode({
-        'title':controller.text,
-        'description':descriptioncontroller.text,
-        'date':datecontroller.text,
-        'startTime':_startTime,
-        'endTime':_endTime,
-        'category':categorycontroller.text,
-      }),
-    );
-    _filteredLists = List<dynamic>.from(_data);
-    notifyListeners();
-    return response.statusCode==200|| response.statusCode==201;
 
+  Future<bool> editData(
+    String title,
+    String description,
+    String date,
+    String startTime,
+    String endTime,
+    String category,
+    String id,
+  ) async {
+    final start = startTimeController.text.isNotEmpty
+        ? startTimeController.text
+        : _startTime;
+    final end = endTimeController.text.isNotEmpty
+        ? endTimeController.text
+        : _endTime;
+    final body = {
+      'title': controller.text,
+      'description': descriptioncontroller.text,
+      'date': datecontroller.text,
+      'startTime': start,
+      'endTime': end,
+      'category': categorycontroller.text,
+    };
+    Response response = await put(
+      Uri.parse(
+        "https://6a2a90b7b687a7d5cbc3fb8a.mockapi.io/api/prasuna/tasks/todo/$id",
+      ),
+      headers: {'content-type': 'application/json'},
+      body: jsonEncode(body),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final dataIndex = _data.indexWhere((task) => task['id'].toString() == id);
+      if (dataIndex != -1) {
+        _data[dataIndex] = {
+          ...Map<String, dynamic>.from(_data[dataIndex] as Map),
+          ...body,
+          'id': _data[dataIndex]['id'],
+        };
+      }
+      _filteredLists = List<dynamic>.from(_data);
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
   // void searchFilter(String keyword) {
   //   String normalize(String text) =>
@@ -297,6 +338,8 @@ Future<void> deleteData(String id)async{
     _startTimeController.text = startTime;
     _endTimeController.text = endTime;
     _categorycontroller.text = category;
+    _startTime = startTime;
+    _endTime = endTime;
     notifyListeners();
   }
 
@@ -307,6 +350,8 @@ Future<void> deleteData(String id)async{
     _startTimeController.clear();
     _endTimeController.clear();
     _categorycontroller.clear();
+    _startTime = null;
+    _endTime = null;
     notifyListeners();
   }
 }
