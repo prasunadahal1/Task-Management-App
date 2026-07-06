@@ -315,25 +315,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         CustomElevatedButton(
                                           onPressed: () async {
+                                            final taskId = p
+                                                .filteredLists[index]['id']
+                                                ?.toString();
+                                            if (taskId == null) return;
+
                                             p.editTask(index);
-                                            p.editData(
-                                              p.filteredLists[index]["title"],
-                                              p.filteredLists[index]["description"],
-                                              p.filteredLists[index]["date"]
-                                                  .toString(),
-                                              p.filteredLists[index]["startTime"]
-                                                  .toString(),
-                                              p.filteredLists[index]["endTime"]
-                                                  .toString(),
-                                              p.filteredLists[index]["category"],
-                                              p.filteredLists[index]["id"]
-                                                  .toString(),
+                                            final success = await p.editData(
+                                              p.controller.text,
+                                              p.descriptioncontroller.text,
+                                              p.datecontroller.text,
+                                              p.startTimeController.text,
+                                              p.endTimeController.text,
+                                              p.categorycontroller.text,
+                                              taskId,
                                             );
+                                            if (!context.mounted) return;
+
                                             p.clearControllers();
                                             Navigator.pop(context);
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
+
+                                            if (success) {
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
                                               SnackBar(
                                                 backgroundColor: Colors.white,
                                                 behavior:
@@ -370,6 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                               ),
                                             );
+                                            }
                                           },
                                           widget: Text('Edit'),
                                         ),
