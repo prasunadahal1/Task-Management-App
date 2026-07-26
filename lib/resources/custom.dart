@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_app/colors/colors.dart';
+import 'package:task_app/resources/colors.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
