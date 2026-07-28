@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:task_app/resources/main_screen.dart';
 
 import '../providers/user_provider/session_management.dart';
-import 'home_screen.dart';
+import '../user_screen/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

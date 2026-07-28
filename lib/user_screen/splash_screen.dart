@@ -8,7 +8,7 @@ import 'package:task_app/resources/main_screen.dart';
 import 'package:task_app/resources/custom.dart';
 
 
-import 'login_screen.dart';
+import '../Auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
