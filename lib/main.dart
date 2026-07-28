@@ -7,13 +7,7 @@ import 'package:task_app/providers/user_provider/session_management.dart';
 import 'package:task_app/resources/main_screen.dart';
 import 'package:task_app/user_screen/splash_screen.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
-  await Supabase.initialize(
-      url:dotenv.env['SUPABASE_URL']!,
-      anonKey:dotenv.env['ANON_KEY']!
-  );
+void main() {
   runApp( MyApp());
 }
 
