@@ -5,14 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:task_app/Auth/login_screen.dart';
 import 'package:task_app/resources/main_screen.dart';
+import 'package:task_app/user_screen/home_screen.dart';
 
 class SessionManagement extends ChangeNotifier {
   static const _storage = FlutterSecureStorage();
 
-  TextEditingController _namecontroller = TextEditingController();
+  TextEditingController _emailcontroller = TextEditingController();
 
-  TextEditingController get namecontroller => _namecontroller;
+  TextEditingController get emailcontroller => _emailcontroller;
 
   TextEditingController _passwordcontroller = TextEditingController();
 
@@ -40,6 +43,47 @@ class SessionManagement extends ChangeNotifier {
 
   Uint8List? _img;
   Uint8List? get img => _img;
+  final supabase =Supabase.instance.client;
+
+  //supbase login
+  login(context)async{
+    try{
+      final result=await supabase.auth.signInWithPassword(email:emailcontroller.text,password: passwordcontroller.text);
+      if(result.user!= null && result.session!= null){
+        Navigator.pushNamed(context, await Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen())));
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
+
+  register(context)async{
+    try{
+      final result=await supabase.auth.signUp(email:emailcontroller.text,password: passwordcontroller.text);
+      if(result.user!= null && result.session!= null){
+        Navigator.pushNamed(context, await Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen())));
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
+
+  nextScreen(BuildContext context) async{
+    await Future.delayed(Duration(seconds:3));
+    if(supabase.auth.currentSession==null){
+      Navigator.pushReplacement(context, await Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginScreen())));
+
+    }else{
+      Navigator.pushReplacement(context, await Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeScreen())));
+    }
+  }
+
 
   Future<void> postData(String username,
       String password,

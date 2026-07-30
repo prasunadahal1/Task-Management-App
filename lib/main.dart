@@ -41,12 +41,12 @@ class MyApp extends StatelessWidget {
             return   MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Flutter Demo',
-              initialRoute: Routes.adminDashboardScreen,
-              onGenerateRoute: AdminRoutesGenerator.generateRoute,
+              // initialRoute: Routes.adminDashboardScreen,
+              // onGenerateRoute: AdminRoutesGenerator.generateRoute,
               themeMode: provider.isDarkMode? ThemeMode.dark:ThemeMode.light,
               theme: ThemeData.light(),
               darkTheme: ThemeData.dark(),
-              home:AdminDashboard(),
+              home:SplashScreen(),
             );
           },
         );
