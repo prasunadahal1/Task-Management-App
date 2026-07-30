@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_app/providers/user_provider/task_providers.dart';
 import 'package:task_app/user_screen/splash_screen.dart';
 
@@ -16,6 +17,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final supabase=Supabase.instance.client;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,8 +116,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leading: Icon(Icons.settings_outlined),
                     title: Text("Logout"),
                     trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {
-                      p.clearSession();
+                    onTap: () async{
+                      await supabase.auth.signOut();
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => SplashScreen()),

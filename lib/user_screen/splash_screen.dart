@@ -54,13 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         listen: false,
       );
-      await session.loadSession();
-      if (session.refreshToken != null) {
-        await session.getCurrentUser();
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>MainScreen()), (route)=>false);
-      } else {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>LoginScreen()), (route)=>false);
-      }
+      session.nextScreen(context);
     });
   }
 
@@ -125,11 +119,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     color: Color(0xFF84C5A5),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  // width: currentPage==1?25:8,
-                  // child: CircleAvatar(
-                  //   radius: 4,
-                  //   backgroundColor: Colors.grey.shade300,
-                  // ),
                 ),
                 SizedBox(width: 6),
                 Container(
@@ -148,15 +137,6 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    //   final session=SessionManagement.instance;
-                    //   session.loadSession().then((response){
-                    //     if(session.userName==null){
-                    //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (rout)=>false));
-                    //     }
-                    //     else{
-                    //       Timer(Duration(seconds:2),()=>Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MainScreen()), (rout)=>false));
-                    //     }
-                    //   });
                     Navigator.push(
                       context,
                       MaterialPageRoute(

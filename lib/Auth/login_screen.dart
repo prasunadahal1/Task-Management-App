@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_app/Auth/signup_screen.dart';
 import 'package:task_app/resources/main_screen.dart';
 
 import '../providers/user_provider/session_management.dart';
@@ -41,10 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 30),
 
               TextFormField(
-                controller: sessionProvider.namecontroller,
+                controller: sessionProvider.emailcontroller,
                 decoration: InputDecoration(
-                  labelText: 'Name',
-                  hintText: 'Enter your name',
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -72,19 +73,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    sessionProvider.postData(sessionProvider.namecontroller.text, sessionProvider.passwordcontroller.text,context);
-                    // final session=SessionManagement.instance;
-                    // session.setSession(sessionProvider.namecontroller.text,sessionProvider.passwordcontroller.text);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => MainScreen(),
-                    //   ),
-                    // );
+                    sessionProvider.login(context);
+                    // sessionProvider.postData(sessionProvider.emailcontroller.text, sessionProvider.passwordcontroller.text,context);
                   },
                   child: Text('Login'),
                 ),
               ),
+              SizedBox(height: 30),
+              TextButton(onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupScreen()));
+              },
+                  child: Text("Don't have an account? SignUp"))
             ],
           ),
         ),
