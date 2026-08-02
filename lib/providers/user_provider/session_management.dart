@@ -7,28 +7,31 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_app/Auth/login_screen.dart';
+import 'package:task_app/admin_screen/admin_dashboard.dart';
 import 'package:task_app/resources/main_screen.dart';
 import 'package:task_app/user_screen/home_screen.dart';
 
 class SessionManagement extends ChangeNotifier {
   static const _storage = FlutterSecureStorage();
 
-  TextEditingController _emailcontroller = TextEditingController();
+  TextEditingController _namecontroller=TextEditingController();
+  TextEditingController get namecontroller=> _namecontroller;
 
+  TextEditingController _emailcontroller = TextEditingController();
   TextEditingController get emailcontroller => _emailcontroller;
 
   TextEditingController _passwordcontroller = TextEditingController();
-
   TextEditingController get passwordcontroller => _passwordcontroller;
 
   static final SessionManagement _instance = SessionManagement();
 
   static SessionManagement get instance => _instance;
-
   String? userName;
+  String? email;
   String? password;
   String? _accessToken;
   String? _refreshToken;
+
 
   String? get accessToken => _accessToken;
 
@@ -45,14 +48,33 @@ class SessionManagement extends ChangeNotifier {
   Uint8List? get img => _img;
   final supabase =Supabase.instance.client;
 
+  //login as admin
+  getUserRole()async{
+    final user = supabase.auth.currentUser;
+    if(user==null) return null;
+    final data=await supabase.from('users').select('role_id').eq('id',user.id).single();
+    return data['role_id'];
+  }
   //supbase login
   login(context)async{
     try{
-      final result=await supabase.auth.signInWithPassword(email:emailcontroller.text,password: passwordcontroller.text);
-      if(result.user!= null && result.session!= null){
+      final result=await supabase.auth.signInWithPassword(email:emailcontroller.text.trim(),password: passwordcontroller.text.trim());
+      final role =await getUserRole();
+      print(role);
+      if(role=='1'){
+        print("hello");
         Navigator.pushNamed(context, await Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen())));
-      }
+            context, MaterialPageRoute(builder: (context) => AdminDashboard())));
+      }else
+        {
+          print("hello2");
+          Navigator.pushNamed(context, await Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomeScreen())));
+        }
+      // if(result.user!= null && result.session!= null){
+      //   Navigator.pushNamed(context, await Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => HomeScreen())));
+      // }
     }catch(e){
       print(e.toString());
     }
@@ -61,8 +83,15 @@ class SessionManagement extends ChangeNotifier {
 
   register(context)async{
     try{
-      final result=await supabase.auth.signUp(email:emailcontroller.text,password: passwordcontroller.text);
+      final result=await supabase.auth.signUp(email:emailcontroller.text.trim(),password: passwordcontroller.text.trim());
+      print("Signing up with: $result");
       if(result.user!= null && result.session!= null){
+        await supabase.from('users').insert({
+          'id':result.user!.id,
+          'name':namecontroller.text,
+          'email':emailcontroller.text,
+        });
+        print("User table insert success");
         Navigator.pushNamed(context, await Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeScreen())));
       }
@@ -75,14 +104,84 @@ class SessionManagement extends ChangeNotifier {
   nextScreen(BuildContext context) async{
     await Future.delayed(Duration(seconds:3));
     if(supabase.auth.currentSession==null){
-      Navigator.pushReplacement(context, await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginScreen())));
-
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen())
+      );
     }else{
-      Navigator.pushReplacement(context, await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen())));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen())
+      );
     }
   }
+
+  Future<void>getUserData()async{
+    final user= supabase.auth.currentUser;
+     if(user== null)return;
+     final data=await supabase.from('users').select('name,email,profilepic').eq("id", user.id).single();
+    print(data);
+     userName=data['name'];
+     email=data['email'];
+    _image=data['profilepic'];
+     notifyListeners();
+  }
+
+  //supabase image upload
+  Future<void> uploadImageToSupabase(Uint8List imageBytes) async {
+    try {
+      final user = supabase.auth.currentUser;
+      if (user == null) return;
+      final fileName = "${user.id}.png";
+      //upload image to bucket
+      await supabase.storage
+          .from('user_pic')
+          .uploadBinary(
+        'image/$fileName',
+        imageBytes,
+
+        fileOptions: const FileOptions(
+          upsert: true,
+          contentType: 'image/png',
+        ),
+      );
+      //convert uploaded image into url
+      final imageUrl = supabase.storage
+          .from('user_pic')
+          .getPublicUrl('image/$fileName');
+         print("Image URL: $imageUrl");
+      //upadate users table
+      final response=await supabase
+          .from('users')
+          .update({
+        'profilepic': imageUrl,
+      }).eq('id', user.id).select();
+      print("Update result: $response");
+      _image = imageUrl;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<dynamic> pickImage(ImageSource source) async{
+    final ImagePicker _imagepicker =ImagePicker();
+    XFile? _file= await _imagepicker.pickImage(source: source);
+
+    if (_file != null) {
+      return await _file.readAsBytes();
+    }
+    notifyListeners();
+  }
+
+  Future<void> selectImage() async {
+    final Uint8List? pickedImage = await pickImage(ImageSource.gallery);
+    if (pickedImage != null) {
+      _img = pickedImage;
+      await uploadImageToSupabase(pickedImage);
+      notifyListeners();
+    }
+  }
+
 
 
   Future<void> postData(String username,
@@ -227,30 +326,8 @@ class SessionManagement extends ChangeNotifier {
     ]);
     notifyListeners();
   }
-  Future<dynamic> pickImage(ImageSource source) async{
-    final ImagePicker _imagepicker =ImagePicker();
-    XFile? _file= await _imagepicker.pickImage(source: source);
 
-    if (_file != null) {
-      return await _file.readAsBytes();
-    }
-    notifyListeners();
-  }
 
-  Future<void> selectImage() async {
-    final Uint8List? pickedImage = await pickImage(ImageSource.gallery);
-    if (pickedImage != null) {
-      _img = pickedImage;
-
-      // final String base64Image = base64Encode(pickedImage);
-      //
-      // await _storage.write(
-      //   key: "galleryImage",
-      //   value: base64Image,
-      // );
-      notifyListeners();
-    }
-  }
   Future<void> getCurrentUser()async{
     final response=await get(Uri.parse("https://dummyjson.com/auth/me"),
       headers: {

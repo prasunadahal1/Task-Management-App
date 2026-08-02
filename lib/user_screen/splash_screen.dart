@@ -56,6 +56,12 @@ class _SplashScreenState extends State<SplashScreen> {
       );
       session.nextScreen(context);
     });
+    Future.microtask(() {
+      Provider.of<SessionManagement>(
+        context,
+        listen: false,
+      ).getUserData();
+    });
   }
 
   final PageController _controller = PageController();
@@ -137,14 +143,14 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) {
-                          return LoginScreen();
-                        },
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) {
+                    //       return LoginScreen();
+                    //     },
+                    //   ),
+                    // );
                   },
                   child: Container(
                     height: 50,

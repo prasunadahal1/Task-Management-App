@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:date_picker_timeline/extra/color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_app/resources/colors.dart';
 import 'package:task_app/providers/user_provider/task_providers.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -23,9 +24,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final supabase =Supabase.instance.client;
   late SessionManagement sessionManagement = Provider.of<SessionManagement>(
     context,
     listen: false,
+
   );
   @override
   void initState() {
@@ -33,8 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       listen: false,
     );
-
     super.initState();
+    Future.microtask(() {
+      Provider.of<SessionManagement>(
+        context,
+        listen: false,
+      ).getUserData();
+    });
     taskProvider.getData();
     taskProvider.data;
   }
@@ -50,14 +58,27 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Column(
           children: [
             SizedBox(height: 13),
-            Text(
-              '${sessionManagement.data["firstName"] ?? ""} ${sessionManagement.data["lastName"] ?? ""}',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: CustomColors.blacktext(context),
-                fontSize: 20,
-              ),
-            ),
+        Text(sessionManagement.userName??"",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: CustomColors.blacktext(context),
+                    fontSize: 20,
+                  ),
+                ),
+            // FutureBuilder(
+            //     future: supabase.from('users').select().eq('id', supabase.auth.currentUser!.id).single(),
+            //     builder: (context,snapshot){
+            //       if (snapshot.connectionState==ConnectionState.waiting){
+            //       }
+            //       final user=snapshot.data??{};
+            //       return  Text(user['name']??"",
+            //         style: TextStyle(
+            //           fontWeight: FontWeight.w500,
+            //           color: CustomColors.blacktext(context),
+            //           fontSize: 20,
+            //         ),
+            //       );
+            //     }),
             Text(
               'Have a nice day!',
               style: TextStyle(

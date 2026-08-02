@@ -33,6 +33,19 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(height: 30),
 
               TextFormField(
+                controller: sessionProvider.namecontroller,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  hintText: 'Enter your name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 20),
+
+              TextFormField(
                 controller: sessionProvider.emailcontroller,
                 decoration: InputDecoration(
                   labelText: 'Email',
