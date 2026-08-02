@@ -8,6 +8,7 @@ import 'package:task_app/providers/user_provider/task_providers.dart';
 import 'package:task_app/user_screen/splash_screen.dart';
 
 import '../providers/user_provider/session_management.dart';
+import '../resources/colors.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -18,6 +19,11 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final supabase=Supabase.instance.client;
+  late SessionManagement sessionManagement = Provider.of<SessionManagement>(
+    context,
+    listen: false,
+
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,17 +72,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 //   ),
                 // ),
                 SizedBox(height: 5),
-                Text(
-                  "${p.data["firstName"]?? ""} ${p.data["lastName"]?? ""}",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
+            Text(sessionManagement.userName??"",
+            style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: CustomColors.blacktext(context),
+            fontSize: 20,
+            ),
+            ),
 
                 SizedBox(height: 3),
-
-                Text(
-                  p.data["email"]?? "",
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
+            Text(sessionManagement.email??"",
+            style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: CustomColors.blacktext(context),
+            fontSize: 20,
+            ),
+            ),
 
                 SizedBox(height: 30),
 
