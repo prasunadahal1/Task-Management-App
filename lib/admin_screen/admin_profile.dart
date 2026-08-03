@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../providers/user_provider/session_management.dart';
 import '../user_screen/splash_screen.dart';
@@ -12,6 +13,11 @@ class AdminProfile extends StatefulWidget {
 }
 
 class _AdminProfileState extends State<AdminProfile> {
+  final supabase=Supabase.instance.client;
+  late SessionManagement sessionManagement = Provider.of<SessionManagement>(
+    context,
+    listen: false,
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,14 +67,14 @@ class _AdminProfileState extends State<AdminProfile> {
                 // ),
                 SizedBox(height: 5),
                 Text(
-                  "${p.data["firstName"]?? ""} ${p.data["lastName"]?? ""}",
+                  sessionManagement.userName??"",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
 
                 SizedBox(height: 3),
 
                 Text(
-                  p.data["email"]?? "",
+                  sessionManagement.email??"",
                   style: TextStyle(color: Colors.grey.shade600),
                 ),
 
@@ -110,8 +116,8 @@ class _AdminProfileState extends State<AdminProfile> {
                     leading: Icon(Icons.settings_outlined),
                     title: Text("Logout"),
                     trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {
-                      p.clearSession();
+                    onTap: ()async {
+                      await supabase.auth.signOut();
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => SplashScreen()),

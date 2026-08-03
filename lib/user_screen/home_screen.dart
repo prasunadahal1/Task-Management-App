@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late SessionManagement sessionManagement = Provider.of<SessionManagement>(
     context,
     listen: false,
-
   );
   @override
   void initState() {

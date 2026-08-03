@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:task_app/providers/admin_provider/admin_dashboard_provider.dart';
 import 'package:task_app/resources/colors.dart';
 import '../Routes/Admin_Routes/admin_route.dart';
+import '../providers/user_provider/session_management.dart';
 import '../user_screen/profile_screen.dart';
 import 'admin_profile.dart';
 
@@ -15,6 +16,20 @@ class AdminDashboard extends StatefulWidget {
 
 class _AdminDashboardState extends State<AdminDashboard> {
   late final AdminDashboardProvider provider = Provider.of<AdminDashboardProvider>(context,listen: false);
+  late SessionManagement sessionManagement = Provider.of<SessionManagement>(
+    context,
+    listen: false,
+  );
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<SessionManagement>(
+        context,
+        listen: false,
+      ).getUserData();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +54,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
                  Navigator.pushNamed(context, Routes.adminProfileScreen);
                },
                child: CircleAvatar(
-                           radius: 24,
-                           backgroundImage:
-                           NetworkImage("https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80"),
-                         ),
+                 backgroundImage: sessionManagement.img != null
+                     ? MemoryImage(sessionManagement.img!)
+                     : sessionManagement.image != null
+                     ? NetworkImage(sessionManagement.image!)
+                     : NetworkImage(
+                   'https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80',
+                 ),
+                 // backgroundImage:sessionProvider.image!=null? MemoryImage(sessionProvider.image! as Uint8List):NetworkImage('https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80'),
+                 backgroundColor: Color(0xFF84C5A5),
+                 radius: 20,
+               ),
              ),
            SizedBox(width: 12),
           Column(
@@ -57,7 +79,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
               SizedBox(height: 2),
               Text(
-                "Prasuna Dahal",
+                sessionManagement.userName??"",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
@@ -259,7 +281,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     crossAxisAlignment:
                     CrossAxisAlignment.start,
                     children: [
-
                       Row(
                         children: [
                           Expanded(

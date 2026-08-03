@@ -13,6 +13,7 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   late final SessionManagement sessionProvider = Provider.of<SessionManagement>(context,listen: false);
+  bool hidePassword=true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,8 +61,20 @@ class _SignupScreenState extends State<SignupScreen> {
 
               TextFormField(
                 controller: sessionProvider.passwordcontroller,
-                obscureText: true,
+                obscureText: hidePassword,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        hidePassword = !hidePassword;
+                      });
+                    },
+                    icon: Icon(
+                      hidePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                  ),
                   labelText: 'Password',
                   hintText: 'Enter your password',
                   border: OutlineInputBorder(

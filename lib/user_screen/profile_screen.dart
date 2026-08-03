@@ -22,7 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late SessionManagement sessionManagement = Provider.of<SessionManagement>(
     context,
     listen: false,
-
   );
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_app/Auth/signup_screen.dart';
-import 'package:task_app/resources/main_screen.dart';
+import 'package:task_app/user_screen/main_screen.dart';
 
 import '../providers/user_provider/session_management.dart';
 import '../user_screen/home_screen.dart';
@@ -15,10 +15,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late final SessionManagement sessionProvider = Provider.of<SessionManagement>(context,listen: false);
+  bool hidePassword=true;
 
   // @override
   // void dispose() {
   //   sessionProvider.namecontroller.dispose();
+  //   sessionProvider.emailcontroller.dispose();
   //   sessionProvider.passwordcontroller.dispose();
   //   super.dispose();
   // }
@@ -56,8 +58,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
               TextFormField(
                 controller: sessionProvider.passwordcontroller,
-                obscureText: true,
+                obscureText: hidePassword,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        hidePassword = !hidePassword;
+                      });
+                    },
+                    icon: Icon(
+                      hidePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                  ),
                   labelText: 'Password',
                   hintText: 'Enter your password',
                   border: OutlineInputBorder(
