@@ -10,6 +10,10 @@ class AdminApprovalTask extends StatefulWidget {
 class _AdminApprovalTaskState extends State<AdminApprovalTask> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body:Center(
+        child: Text('hi'),
+      ),
+    );
   }
 }

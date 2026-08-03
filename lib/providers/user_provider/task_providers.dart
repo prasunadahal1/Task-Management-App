@@ -23,13 +23,9 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
   List<Map<String, dynamic>> _category = [
-    {'title': 'Work', 'isSelected': false},
-    {'title': 'Meeting', 'isSelected': false},
-    {'title': 'Study', 'isSelected': false},
-    {'title': 'Personal', 'isSelected': false},
-    {'title': 'Work', 'isSelected': false},
-    {'title': 'Work', 'isSelected': false},
-    {'title': 'Work', 'isSelected': false},
+    {'title': 'High', 'isSelected': false},
+    {'title': 'Medium', 'isSelected': false},
+    {'title': 'Low', 'isSelected': false},
   ];
   List<Map<String, dynamic>> _tasks = [
     {

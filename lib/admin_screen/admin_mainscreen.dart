@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'colors.dart';
-import '../user_screen/addtask_screen.dart';
-import '../user_screen/home_screen.dart';
-import '../user_screen/taskupdate_screen.dart';
+import 'package:task_app/admin_screen/admin_approvaltask.dart';
+import 'package:task_app/admin_screen/admin_createtask.dart';
+import 'package:task_app/admin_screen/admin_dashboard.dart';
+import '../resources/colors.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class AdminMainscreen extends StatefulWidget {
+  const AdminMainscreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<AdminMainscreen> createState() => _AdminMainscreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _AdminMainscreenState extends State<AdminMainscreen> {
   final List<Widget> page=[
-    HomeScreen(),
-    TaskupdateScreen(),
+    AdminDashboard(),
+    AdminApprovalTask()
   ];
   int currentIndex=0;
   @override
@@ -42,11 +42,9 @@ class _MainScreenState extends State<MainScreen> {
                     icon: Icons.assignment,
                     index: 1,
                   ),
-              // BottomNavigationBarItem(icon:Icon(Icons.home),label: 'Home'),
-              // BottomNavigationBarItem(icon:Icon(Icons.task),label: 'Task'),
-            ]
-        ),
-        ),
+                ]
+            ),
+          ),
         ),
       ),
       floatingActionButton: Container(
@@ -66,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_){
-                  return AddtaskScreen();
+                  return AdminCreateTask();
                 }
                 ));
           },
@@ -108,6 +106,4 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-
 }
-

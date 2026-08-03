@@ -8,7 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_app/Auth/login_screen.dart';
 import 'package:task_app/admin_screen/admin_dashboard.dart';
-import 'package:task_app/resources/main_screen.dart';
+import 'package:task_app/admin_screen/admin_mainscreen.dart';
+import 'package:task_app/user_screen/main_screen.dart';
 import 'package:task_app/user_screen/home_screen.dart';
 
 class SessionManagement extends ChangeNotifier {
@@ -49,27 +50,34 @@ class SessionManagement extends ChangeNotifier {
   final supabase =Supabase.instance.client;
 
   //login as admin
-  getUserRole()async{
+  Future<int?>getUserRole()async{
     final user = supabase.auth.currentUser;
     if(user==null) return null;
     final data=await supabase.from('users').select('role_id').eq('id',user.id).single();
-    return data['role_id'];
+    return data['role_id']as int?;
   }
   //supbase login
   login(context)async{
     try{
       final result=await supabase.auth.signInWithPassword(email:emailcontroller.text.trim(),password: passwordcontroller.text.trim());
-      final role =await getUserRole();
+      final int? role =await getUserRole();
       print(role);
-      if(role=='1'){
+      emailcontroller.clear();
+      passwordcontroller.clear();
+      if (!context.mounted) return;
+      if(role==1){
         print("hello");
-        Navigator.pushNamed(context, await Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AdminDashboard())));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AdminMainscreen()),
+        );
       }else
         {
           print("hello2");
-          Navigator.pushNamed(context, await Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeScreen())));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MainScreen()),
+          );
         }
       // if(result.user!= null && result.session!= null){
       //   Navigator.pushNamed(context, await Navigator.push(
@@ -91,6 +99,9 @@ class SessionManagement extends ChangeNotifier {
           'name':namecontroller.text,
           'email':emailcontroller.text,
         });
+        namecontroller.clear();
+        emailcontroller.clear();
+        passwordcontroller.clear();
         print("User table insert success");
         Navigator.pushNamed(context, await Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeScreen())));

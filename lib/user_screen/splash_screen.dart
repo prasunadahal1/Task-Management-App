@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_app/resources/colors.dart';
 import 'package:task_app/providers/user_provider/session_management.dart';
-import 'package:task_app/resources/main_screen.dart';
+import 'package:task_app/user_screen/main_screen.dart';
 import 'package:task_app/resources/custom.dart';
 
 
