@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_app/providers/admin_provider/admin_dashboard_provider.dart';
 import 'package:task_app/providers/user_provider/task_providers.dart';
 
 import '../providers/user_provider/session_management.dart';
@@ -15,6 +16,10 @@ class AdminCreateTask extends StatefulWidget {
 
 class _AdminCreateTaskState extends State<AdminCreateTask> {
   late SessionManagement sessionManagement = Provider.of<SessionManagement>(
+    context,
+    listen: false,
+  );
+  late AdminDashboardProvider provider = Provider.of<AdminDashboardProvider>(
     context,
     listen: false,
   );
@@ -143,7 +148,101 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                   ),
                 ),
                 SizedBox(height:10),
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Consumer<AdminDashboardProvider>(
+                    builder: (context, provider, child) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                           Row(
+                            children: [
+                              Icon(Icons.person_outline),
+                              SizedBox(width: 8),
+                              Text(
+                                "Assign To",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
 
+                           SizedBox(height: 10),
+
+                          Container(
+                            padding:  EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<Map<String, dynamic>>(
+                                isExpanded: true,
+                                hint:  Text("Select Employee"),
+                                value: provider.selectedEmployee,
+                                items: provider.employees.map((employee) {
+                                  return DropdownMenuItem<Map<String, dynamic>>(
+                                    value: employee,
+                                    child: Text(
+                                      "${employee["name"]} (${employee["role"]})",
+                                      style:  TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: provider.changeEmployee,
+                              ),
+                            ),
+                          ),
+
+                           SizedBox(height: 25),
+
+
+                           Row(
+                            children: [
+                              Icon(Icons.sync_alt),
+                              SizedBox(width: 8),
+                              Text(
+                                "Status",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                           SizedBox(height: 10),
+
+                          Container(
+                            padding:  EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<Map<String, dynamic>>(
+                                isExpanded: true,
+                                value: provider.selectedStatus,
+                                items: provider.statusList.map((status) {
+                                  return DropdownMenuItem<Map<String, dynamic>>(
+                                    value: status,
+                                    child: Text(status["status"]),
+                                  );
+                                }).toList(),
+                                onChanged: provider.changeStatus,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width * 1,
                   height: MediaQuery.of(context).size.height * 0.5,
