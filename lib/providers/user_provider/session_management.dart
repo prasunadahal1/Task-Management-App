@@ -12,6 +12,11 @@ import 'package:task_app/admin_screen/admin_mainscreen.dart';
 import 'package:task_app/user_screen/main_screen.dart';
 import 'package:task_app/user_screen/home_screen.dart';
 
+class TaskActionResult {
+  final bool success;
+  final String message;
+  TaskActionResult(this.success, this.message);
+}
 class SessionManagement extends ChangeNotifier {
   static const _storage = FlutterSecureStorage();
 
@@ -25,6 +30,9 @@ class SessionManagement extends ChangeNotifier {
   TextEditingController get passwordcontroller => _passwordcontroller;
 
   static final SessionManagement _instance = SessionManagement();
+
+  Map<String, dynamic>? selectedStatus;
+  Map<String, dynamic>? selectedEmployee;
 
   static SessionManagement get instance => _instance;
   String? userName;
@@ -48,6 +56,10 @@ class SessionManagement extends ChangeNotifier {
   Uint8List? _img;
   Uint8List? get img => _img;
   final supabase =Supabase.instance.client;
+
+  bool isLoading = false;  //fetch task
+  bool isAssigning = false;    //assign task
+  String? errorMessage;
 
   //login as admin
   Future<int?>getUserRole()async{
@@ -104,7 +116,7 @@ class SessionManagement extends ChangeNotifier {
         passwordcontroller.clear();
         print("User table insert success");
         Navigator.pushNamed(context, await Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen())));
+            context, MaterialPageRoute(builder: (context) => MainScreen())));
       }
     }catch(e){
       print(e.toString());
@@ -113,17 +125,31 @@ class SessionManagement extends ChangeNotifier {
   }
 
   nextScreen(BuildContext context) async{
-    await Future.delayed(Duration(seconds:3));
-    if(supabase.auth.currentSession==null){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen())
-      );
-    }else{
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen())
-      );
+    await Future.delayed(Duration(seconds:2));
+    try{
+             if(supabase.auth.currentSession==null){
+               if(!context.mounted)return;
+               Navigator.pushReplacement(
+                   context,
+                   MaterialPageRoute(builder: (context) => LoginScreen())
+               );
+               return;
+             }
+          final int?role=await getUserRole();
+             if(!context.mounted)return;
+             if(role==1){
+               Navigator.pushReplacement(
+                   context,
+                   MaterialPageRoute(builder: (context) => AdminMainscreen())
+               );
+             }else {
+               Navigator.pushReplacement(
+                   context,
+                   MaterialPageRoute(builder: (context) => MainScreen())
+               );
+             }
+    }catch(e){
+      print(e);
     }
   }
 
@@ -192,6 +218,60 @@ class SessionManagement extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+//assign tasks in supabase
+  Future<TaskActionResult> assignTask({
+    required String title,
+    required String description,
+    required String dueDate,
+    required String assignTo,
+    required String status,
+    required String priority,
+  }) async {
+
+    if (title.trim().isEmpty) {
+      return TaskActionResult(false, 'Title is required');
+    }
+    if (selectedEmployee == null) {
+      return TaskActionResult(false, 'Please select an employee');
+    }
+    if (selectedStatus == null) {
+      return TaskActionResult(false, 'Please select a status');
+    }
+
+    isAssigning = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      await supabase.from('tasks').insert({
+        'Title': title,
+        'Description': description,
+        'Due Date': dueDate,
+        'Assign To':assignTo,
+        'Status':status,
+        'Priority': priority,
+      });
+
+      await fetchTask();
+
+      isAssigning = false;
+      notifyListeners();
+      return TaskActionResult(true, 'Assigned Task Successfully');
+    } catch (e) {
+      isAssigning = false;
+      notifyListeners();
+      return TaskActionResult(false, 'Failed to assign task: $e');
+    }
+  }
+
+  Future<void>fetchTask()async{
+
+  }
+
+
+
+
 
 
 

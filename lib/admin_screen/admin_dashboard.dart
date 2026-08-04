@@ -271,7 +271,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 final project = provider.projectList[index];
                 return Container(
                   margin:  EdgeInsets.only(bottom: 14),
-                  padding: const EdgeInsets.all(16),
+                  padding:  EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius:
@@ -285,7 +285,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         children: [
                           Expanded(
                             child: Text(
-                              project["title"],
+                              project["title"]??"",
                               style:  TextStyle(
                                 fontWeight:
                                 FontWeight.w600,
@@ -306,15 +306,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   20),
                             ),
                             child: Text(
-                              project["priority"],
+                              project["priority"]??"",
                               style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.green,
                                 fontWeight:
                                 FontWeight.bold,
                               ),
-                            ),
-                          )
+                            )
+                          ),
+                          Text(project["description"]??""),
                         ],
                       ),
 
@@ -322,15 +323,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
                       Row(
                         children: [
-
-                           CircleAvatar(
-                            radius: 13,
-                            backgroundImage:
-                            NetworkImage(
-                                "https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80"),
-                          ),
+                          //  CircleAvatar(
+                          //   radius: 13,
+                          //   backgroundImage:
+                          //   NetworkImage(
+                          //       "https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80"),
+                          // ),
                            SizedBox(width: 8),
-                          Text(project["name"]),
+                          Text(project["name"]??""),
                           Spacer(),
                           Container(
                             padding:
@@ -344,7 +344,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   20),
                             ),
                             child: Text(
-                              project["status"],
+                              project["status"]??"",
                               style:  TextStyle(
                                 fontSize: 11,
                               ),
@@ -352,7 +352,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                            SizedBox(width: 10),
                           Text(
-                            project["date"],
+                            project["date"]??"",
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
