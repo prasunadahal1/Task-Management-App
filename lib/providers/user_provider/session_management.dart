@@ -18,6 +18,7 @@ class TaskActionResult {
   TaskActionResult(this.success, this.message);
 }
 class SessionManagement extends ChangeNotifier {
+  late final AdminDashboard adminDash;
   static const _storage = FlutterSecureStorage();
 
   TextEditingController _namecontroller=TextEditingController();
@@ -219,55 +220,8 @@ class SessionManagement extends ChangeNotifier {
     }
   }
 
-//assign tasks in supabase
-  Future<TaskActionResult> assignTask({
-    required String title,
-    required String description,
-    required String dueDate,
-    required String assignTo,
-    required String status,
-    required String priority,
-  }) async {
 
-    if (title.trim().isEmpty) {
-      return TaskActionResult(false, 'Title is required');
-    }
-    if (selectedEmployee == null) {
-      return TaskActionResult(false, 'Please select an employee');
-    }
-    if (selectedStatus == null) {
-      return TaskActionResult(false, 'Please select a status');
-    }
 
-    isAssigning = true;
-    errorMessage = null;
-    notifyListeners();
-
-    try {
-      await supabase.from('tasks').insert({
-        'Title': title,
-        'Description': description,
-        'Due Date': dueDate,
-        'Assign To':assignTo,
-        'Status':status,
-        'Priority': priority,
-      });
-
-      await fetchTask();
-
-      isAssigning = false;
-      notifyListeners();
-      return TaskActionResult(true, 'Assigned Task Successfully');
-    } catch (e) {
-      isAssigning = false;
-      notifyListeners();
-      return TaskActionResult(false, 'Failed to assign task: $e');
-    }
-  }
-
-  Future<void>fetchTask()async{
-
-  }
 
 
 

@@ -286,7 +286,6 @@ Future<void> deleteData(String id)async{
         if (data is Map<String, dynamic>) {
           final String normalizedName =
           normalize(data['title']?.toString() ?? '');
-
           return normalizedName.contains(normalizedKeyword);
         }
         return false;
