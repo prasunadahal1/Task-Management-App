@@ -110,7 +110,7 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                     children: [
                       TextFormField(
                         textAlignVertical: TextAlignVertical(y: 0.5),
-                        controller: p.controller,
+                        controller: provider.controller,
                         decoration: InputDecoration(
                           labelText: 'Title',
                           labelStyle: TextStyle(color: Colors.white),
@@ -119,7 +119,7 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                       ),
                       Divider(color: CustomColors.addtaskdivider(context)),
                       TextFormField(
-                        controller: p.descriptioncontroller,
+                        controller: provider.descriptioncontroller,
                         maxLines: 2,
                         decoration: InputDecoration(
                           labelText: 'Description',
@@ -129,7 +129,7 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                       ),
                       Divider(color: CustomColors.addtaskdivider(context)),
                       TextFormField(
-                        controller: p.datecontroller,
+                        controller: provider.datecontroller,
                         decoration: InputDecoration(
                           labelText: 'Due Date',
                           labelStyle: TextStyle(color: Colors.white),
@@ -140,7 +140,7 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                           ),
                         ),
                         onTap: () async {
-                          p.pickDate(context);
+                          provider.pickDate(context);
                         },
                       ),
                       Divider(color: CustomColors.addtaskdivider(context)),
@@ -186,7 +186,7 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                                   return DropdownMenuItem<Map<String, dynamic>>(
                                     value: employee,
                                     child: Text(
-                                      "${employee["name"]} (${employee["role"]})",
+                                      "${employee["name"]} (${employee["role"]})" ,
                                       style:  TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
@@ -194,7 +194,10 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                                     ),
                                   );
                                 }).toList(),
-                                onChanged: provider.changeEmployee,
+                                onChanged: (value) {
+                                  context.read<AdminDashboardProvider>().changeEmployee(value);
+                                },
+                                // onChanged: provider.changeEmployee,
                               ),
                             ),
                           ),
@@ -234,7 +237,10 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                                     child: Text(status["status"]),
                                   );
                                 }).toList(),
-                                onChanged: provider.changeStatus,
+                                onChanged: (value) {
+                                  context.read<AdminDashboardProvider>().changeStatus(value);
+                                },
+                                // onChanged: provider.changeStatus,
                               ),
                             ),
                           ),
@@ -279,7 +285,7 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                               height:42,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: p.category.length,
+                                itemCount: provider.category.length,
                                 itemBuilder: (context, index) {
                                   return Row(
                                     children: [
@@ -288,21 +294,21 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                                         shape: RoundedSuperellipseBorder(
                                           borderRadius: BorderRadius.circular(20),
                                         ),
-                                        backgroundColor: p.category[index]['isSelected']
+                                        backgroundColor: provider.category[index]['isSelected']
                                             ? CustomColors.addtaskprimarygreen(context)
                                             : Color(0xFFEAFBF0),
                                         label: Text(
-                                          p.category[index]['title'],
+                                          provider.category[index]['title'],
                                           style: TextStyle(
-                                            color: p.category[index]['isSelected']
+                                            color: provider.category[index]['isSelected']
                                                 ? Colors.white
                                                 : Colors.black,
                                           ),
                                         ),
-                                        selected:p.category[index]['isSelected'],
+                                        selected:provider.category[index]['isSelected'],
                                         onSelected: (value) {
-                                          p.chip(index, value);
-                                          print(p.title);
+                                          provider.chip(index, value);
+                                          print(provider.title);
                                         },
                                       ),
                                     ],
@@ -319,17 +325,22 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                           height: 50,
                           borderRadius: 15,
                           onPressed: () async {
-                            if (p.controller.text.trim().isNotEmpty) {
-                              await context.read<TaskProvider>().addTask(
-                                p.controller.text.trim(),
-                                p.descriptioncontroller.text.trim(),
-                                p.datecontroller.text.trim(),
-                                p.startTimeController.text.trim(),
-                                p.endTimeController.text.trim(),
-                                p.title!,
-                                context,
-                              );
-                              p.controllerclear();
+                            print('DEBUG Title: "${provider.controller.text}"');
+                            print('DEBUG Desc: "${provider.descriptioncontroller.text}"');
+                            print('DEBUG Date: "${provider.datecontroller.text}"');
+                            print('DEBUG Assign: "${provider.assigncontroller.text}"');
+                            print('DEBUG Priority: "${provider.prioritycontroller.text}"');
+                            print('DEBUG Status: "${provider.statuscontroller.text}"');
+                            if (provider.controller.text.trim().isNotEmpty) {
+                              await context.read<AdminDashboardProvider>().assignTask(
+                                  title: provider.controller.text.trim(),
+                                  description: provider.descriptioncontroller.text.trim(),
+                                  dueDate: provider.datecontroller.text.trim(),
+                                  assignTo: provider.assigncontroller.text.trim(),
+                                  status: provider.statuscontroller.text.trim(),
+                                  priority: provider.prioritycontroller.text.trim());
+                              // p.controllerclear();
+                              print('assign task');
                             }
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(

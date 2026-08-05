@@ -285,7 +285,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         children: [
                           Expanded(
                             child: Text(
-                              project["title"]??"",
+                              project['Title']??"",
                               style:  TextStyle(
                                 fontWeight:
                                 FontWeight.w600,
@@ -306,7 +306,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   20),
                             ),
                             child: Text(
-                              project["priority"]??"",
+                              project["Priority"]??"",
                               style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.green,
@@ -315,7 +315,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               ),
                             )
                           ),
-                          Text(project["description"]??""),
+                          Text(project["Description"]??""),
                         ],
                       ),
 
@@ -330,7 +330,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           //       "https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?semt=ais_hybrid&w=740&q=80"),
                           // ),
                            SizedBox(width: 8),
-                          Text(project["name"]??""),
+                          Text(project["Assign To"]??""),
                           Spacer(),
                           Container(
                             padding:
@@ -344,7 +344,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   20),
                             ),
                             child: Text(
-                              project["status"]??"",
+                              project["Status"]??"",
                               style:  TextStyle(
                                 fontSize: 11,
                               ),
@@ -352,7 +352,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                            SizedBox(width: 10),
                           Text(
-                            project["date"]??"",
+                            project["Due Date"]??"",
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
