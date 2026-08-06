@@ -41,7 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         listen: false,
       ).getUserData();
+
     });
+
     taskProvider.getData();
     taskProvider.data;
   }
@@ -199,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: p.filteredLists.length,
+                    itemCount: p.projectList.length,
                     itemBuilder: (context, index) {
                       return Slidable(
                         endActionPane: ActionPane(
@@ -569,7 +571,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       crossAxisAlignment: .start,
                                       children: [
                                         Text(
-                                          p.filteredLists[index]['title'],
+                                          p.projectList[index]['Title']??"",
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -577,7 +579,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         Text(
-                                          p.filteredLists[index]['description'],
+                                          p.projectList[index]['Description']??"",
                                           style: TextStyle(
                                             color: CustomColors.greytext(
                                               context,
@@ -586,7 +588,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         Text(
-                                          '${p.filteredLists[index]['startTime']}-${p.filteredLists[index]['endTime']}',
+                                          p.projectList[index]['Status']??"",
                                           style: TextStyle(
                                             color: CustomColors.greytext(
                                               context,
@@ -595,7 +597,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         Text(
-                                          p.filteredLists[index]['category'],
+                                          p.projectList[index]['Priority']??"",
                                           style: TextStyle(
                                             color: CustomColors.greytext(
                                               context,
@@ -607,7 +609,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Text(
-                                    p.filteredLists[index]['date'],
+                                    p.projectList[index]['Due Date']??"",
                                     style: TextStyle(
                                       color: CustomColors.greytext(context),
                                       fontSize: 12,

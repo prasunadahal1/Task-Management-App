@@ -142,17 +142,19 @@ class AdminDashboardProvider extends ChangeNotifier{
   }
 
   void changeEmployee(value) {
+    print('employee name');
     selectedEmployee = value;
     print(value);
-    assigncontroller.text=value['Assign To'] ??"";
+    assigncontroller.text=value['name'] ??"";
     print(value);
     notifyListeners();
   }
 
   void changeStatus(value) {
+    print("status");
     selectedStatus = value;
     print(value);
-    statuscontroller.text=value['Status']??"";
+    statuscontroller.text=value['status']??"";
     print(value);
     notifyListeners();
   }
@@ -189,6 +191,7 @@ class AdminDashboardProvider extends ChangeNotifier{
       });
       print('provider assigntask');
       await fetchTask();
+      notifyListeners();
       print('provider assigntask');
 
     } catch (e) {
@@ -204,8 +207,18 @@ class AdminDashboardProvider extends ChangeNotifier{
           .order('created_at', ascending: false);
 
       projectList = List<Map<String, dynamic>>.from(data as List);
+      notifyListeners();
     } catch (e) {
      print(e);
     }
+  }
+  void clearControllers() {
+    _controller.clear();
+    _descriptioncontroller.clear();
+    _datecontroller.clear();
+    _statuscontroller.clear();
+    _prioritycontroller.clear();
+    _category.clear();
+    notifyListeners();
   }
 }

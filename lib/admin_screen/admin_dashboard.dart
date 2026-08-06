@@ -29,6 +29,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
         listen: false,
       ).getUserData();
     });
+    Future.microtask(() {
+      Provider.of<AdminDashboardProvider>(
+        context,
+        listen: false,
+      ).fetchTask();
+    });
   }
   @override
   Widget build(BuildContext context) {

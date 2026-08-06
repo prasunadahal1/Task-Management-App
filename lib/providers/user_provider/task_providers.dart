@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TaskProvider extends ChangeNotifier {
-
+  final supabase =Supabase.instance.client;
   String? _title = "";
   String? get title=>_title;
 
@@ -26,6 +27,24 @@ class TaskProvider extends ChangeNotifier {
     {'title': 'High', 'isSelected': false},
     {'title': 'Medium', 'isSelected': false},
     {'title': 'Low', 'isSelected': false},
+  ];
+  late List<Map<String, dynamic>> projectList = [
+    {
+      "Title": "Task Management App",
+      "Description": "This is Description1",
+      "Assign To": "Prasuna Dahal",
+      "Status": "In Progress",
+      "Priority": "HIGH",
+      "Due Date": "Due 29 Aug, 2026",
+    },
+    {
+      "Title": "GitHub Profile Viewer",
+      "Description": " This is Description2",
+      "Assign To": "Jyoti Mandal",
+      "Status": "In Progress",
+      "Priority": "High",
+      "Date": "Due 29 Aug, 2026",
+    },
   ];
   List<Map<String, dynamic>> _tasks = [
     {
@@ -91,6 +110,15 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
     print(title);
   }
+ Future<void>getAssignTask (String name)async{
+try{
+  final data =await supabase.from('AssignTask').select().eq("Assign To",name).order("Due Date",ascending: true);
+  _filteredLists=List<Map<String,dynamic>>.from(data);
+  notifyListeners();
+}catch(e){
+  debugPrint('Fetch Assigned Tasks Error:$e');
+}
+}
 
   Future<bool> addTask(
     String title,
