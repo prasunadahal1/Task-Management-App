@@ -339,7 +339,7 @@ class _AdminCreateTaskState extends State<AdminCreateTask> {
                                   assignTo: provider.assigncontroller.text.trim(),
                                   status: provider.statuscontroller.text.trim(),
                                   priority: provider.prioritycontroller.text.trim());
-                              // p.controllerclear();
+                              provider.clearControllers();
                               print('assign task');
                             }
                             if (context.mounted) {
